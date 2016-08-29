@@ -1,4 +1,4 @@
-package com.itemis.gef.tutorial.visuals;
+package com.itemis.gef.tutorial.mindmap.visuals;
 
 import org.eclipse.gef.fx.nodes.GeometryNode;
 import org.eclipse.gef.geometry.planar.RoundedRectangle;
