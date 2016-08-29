@@ -20,7 +20,7 @@ After the creation of the project, open the file `MANIFEST.MF` in the folder, go
 
 Without this setting, eclipse can't find the classes in this packages we want to use in our model.
 
-##Create the abstract class
+## Create the abstract class
 
 Every element in our mind map is a subclass of `AbstractMindMapItem`. 
 
@@ -97,7 +97,7 @@ The code is self explanatory. The simple mind map just consist of a list of Mind
 
 You might wonder, why the node and the connections are'nt in separate lists. We will come to that in a later tutorial. 
 
-# Create the MindMapNode
+## Create the MindMapNode
 
 First we need to create an empty class: `MindMapConnection` so we can use it in our references. After thatcreate the class `MindMapNode`.
 
@@ -221,7 +221,7 @@ In addition we store references of connections, which either are incoming or out
 
 We also inform any listener on changes of the model, via the `PropertyChangeSupport`.
 
-# Create the MindMapConnection
+## Create the MindMapConnection
 
 The last model class we create is the `MindMapConnection`.
 

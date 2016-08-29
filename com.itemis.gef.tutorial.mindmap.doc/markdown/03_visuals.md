@@ -50,7 +50,7 @@ Here is the code:
 	}
 
 
-# Create the node visual
+## Create the node visual
 
 The second visual is a bit more complex. basically our node is a rectangle with rounded corners and two text elements inside.
 
