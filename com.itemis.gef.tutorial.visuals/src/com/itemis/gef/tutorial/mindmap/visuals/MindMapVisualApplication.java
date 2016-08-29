@@ -29,7 +29,7 @@ public class MindMapVisualApplication extends Application {
 		node2.relocate(150, 250);
 		node2.setColor(Color.ALICEBLUE);
 		
-		Connection conn = new MindMapConnectionVisuals();
+		Connection conn = new MindMapConnectionVisual();
 		conn.setStartAnchor(new DynamicAnchor(node, new ChopBoxStrategy()));
 		conn.setEndAnchor(new DynamicAnchor(node2, new ChopBoxStrategy()));
 		
