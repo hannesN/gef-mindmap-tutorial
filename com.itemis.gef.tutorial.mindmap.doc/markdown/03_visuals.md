@@ -26,7 +26,7 @@ The first visual is the Connection visual. The class `MindMapConnectionVisuals` 
 
 Here is the code:
 
-	package com.itemis.gef.tutorial.visuals;
+	package com.itemis.gef.tutorial.mindmap.visuals;
 	
 	import org.eclipse.gef.fx.nodes.Connection;
 	
@@ -57,7 +57,7 @@ The second visual is a bit more complex. basically our node is a rectangle with 
 With some JavaFX knowledge, you should understand the following code:
 
  
-	package com.itemis.gef.tutorial.visuals;
+	package com.itemis.gef.tutorial.mindmap.visuals;
 	
 	import org.eclipse.gef.fx.nodes.GeometryNode;
 	import org.eclipse.gef.geometry.planar.RoundedRectangle;
@@ -162,7 +162,7 @@ To test our visuals, we create a little JavaFX Application and create some examp
 
 Here is the code:
 
-	package com.itemis.gef.tutorial.visuals;
+	package com.itemis.gef.tutorial.mindmap.visuals;
 	
 	import org.eclipse.gef.fx.anchors.ChopBoxStrategy;
 	import org.eclipse.gef.fx.anchors.DynamicAnchor;
@@ -229,4 +229,26 @@ To start the application, just use the context menu on the java file and chose: 
 The example should look like this:
 
 ![Rendered visuals](images/visualapplication_shot.png "Screenshot of MindMapVisualApplication")
+
+## Exporting the package
+
+Similar to the model, we need to export our visual package to be able to use it outside the plug-in.
+Open the file `MANIFEST.MF` and go to the tab *Runtime*.
+Press *Add* and add the package ``.
+
+Your final file should be locking like this:
+
+	Manifest-Version: 1.0
+	Bundle-ManifestVersion: 2
+	Bundle-Name: Visuals
+	Bundle-SymbolicName: com.itemis.gef.tutorial.mindmap.visuals
+	Bundle-Version: 1.0.0.qualifier
+	Bundle-Vendor: ITEMIS
+	Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+	Require-Bundle: org.eclipse.gef.geometry;bundle-version="5.0.0",
+	 org.eclipse.gef.fx;bundle-version="5.0.0",
+	 org.eclipse.gef.common;bundle-version="5.0.0",
+	 org.eclipse.gef.geometry.convert.fx;bundle-version="5.0.0"
+	Import-Package: com.google.common.collect;version="15.0.0"
+	Export-Package: com.itemis.gef.tutorial.mindmap.visuals
 
