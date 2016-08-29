@@ -77,3 +77,5 @@ configuration for the Snippet. It should be at *Java Application->ConnectionSnip
 
 Now we are set up to develop our own mind map editor.
 
+
+

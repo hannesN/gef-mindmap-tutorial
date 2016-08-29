@@ -229,3 +229,4 @@ To start the application, just use the context menu on the java file and chose: 
 The example should look like this:
 
 ![Rendered visuals](images/visualapplication_shot.png "Screenshot of MindMapVisualApplication")
+

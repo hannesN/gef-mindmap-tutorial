@@ -373,3 +373,4 @@ the final `MANIFEST.MF` should look like this:
 	 org.eclipse.gef.geometry.planar
 	Export-Package: com.itemis.gef.tutorial.mindmap.model
 
+
