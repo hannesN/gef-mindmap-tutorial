@@ -14,7 +14,7 @@ import com.google.common.collect.SetMultimap;
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Provider;
 import com.itemis.gef.tutorial.mindmap.model.MindMapConnection;
-import com.itemis.gef.tutorial.mindmap.visuals.MindMapConnectionVisuals;
+import com.itemis.gef.tutorial.mindmap.visuals.MindMapConnectionVisual;
 
 import javafx.scene.Node;
 
@@ -45,7 +45,7 @@ public class MindMapConnectionPart extends AbstractFXContentPart<Connection> {
 
 		@Override
 		protected Connection createVisual() {
-			return new MindMapConnectionVisuals();
+			return new MindMapConnectionVisual();
 		}
 
 		@Override

@@ -5,7 +5,7 @@ import org.eclipse.gef.fx.nodes.Connection;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Polygon;
 
-public class MindMapConnectionVisuals extends Connection {
+public class MindMapConnectionVisual extends Connection {
 
 	public static class ArrowHead extends Polygon {
 		public ArrowHead() {
@@ -13,7 +13,7 @@ public class MindMapConnectionVisuals extends Connection {
 		}
 	}
 
-	public MindMapConnectionVisuals() {
+	public MindMapConnectionVisual() {
 		ArrowHead endDecoration = new ArrowHead();
 		endDecoration.setFill(Color.BLACK);
 		setEndDecoration(endDecoration);
