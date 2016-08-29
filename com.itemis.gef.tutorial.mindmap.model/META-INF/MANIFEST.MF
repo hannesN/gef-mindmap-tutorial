@@ -1,0 +1,10 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Simple Mindmap Model
+Bundle-SymbolicName: com.itemis.gef.tutorial.mindmap.model
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: ITEMIS
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: com.google.common.collect,
+ org.eclipse.gef.geometry.planar
+Export-Package: com.itemis.gef.tutorial.mindmap.model
