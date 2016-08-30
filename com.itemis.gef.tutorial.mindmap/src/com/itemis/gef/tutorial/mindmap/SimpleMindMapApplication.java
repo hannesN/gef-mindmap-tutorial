@@ -1,5 +1,7 @@
 package com.itemis.gef.tutorial.mindmap;
 
+import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.mvc.fx.domain.FXDomain;
 import org.eclipse.gef.mvc.fx.viewer.FXViewer;
@@ -10,11 +12,17 @@ import com.itemis.gef.tutorial.mindmap.model.SimpleMindMap;
 import com.itemis.gef.tutorial.mindmap.model.SimpleMindMapExampleFactory;
 
 import javafx.application.Application;
+import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 
 /**
- * Entry point for our Simple Mind Map Editor, creating ans rendering a JavaFX Window.
+ * Entry point for our Simple Mind Map Editor, creating ans rendering a JavaFX
+ * Window.
+ * 
  * @author hniederhausen
  *
  */
@@ -66,6 +74,7 @@ public class SimpleMindMapApplication extends Application {
 
 	/**
 	 * Returns the content viewer of the domain
+	 * 
 	 * @return
 	 */
 	private FXViewer getContentViewer() {
@@ -77,8 +86,55 @@ public class SimpleMindMapApplication extends Application {
 	 * Creating JavaFX widgets and set them to the stage.
 	 */
 	private void hookViewers() {
-		Scene scene = new Scene(getContentViewer().getCanvas());
+		// creating parent pane for Canvas and button pane
+		BorderPane pane = new BorderPane();
+
+		pane.setTop(createButtonBar());
+		pane.setCenter(getContentViewer().getCanvas());
+
+		pane.setMinWidth(800);
+		pane.setMinHeight(600);
+		
+		Scene scene = new Scene(pane);
 		primaryStage.setScene(scene);
+	}
+
+	/**
+	 * Creates the undo/redo buttons
+	 * 
+	 * @return
+	 */
+	private Node createButtonBar() {
+
+		Button undoButton = new Button("Undo");
+		undoButton.setDisable(true);
+		undoButton.setOnAction((e) -> {
+			try {
+				domain.getOperationHistory().undo(domain.getUndoContext(), null, null);
+			} catch (ExecutionException e1) {
+				e1.printStackTrace();
+			}
+		});
+
+		Button redoButton = new Button("Redo");
+		redoButton.setDisable(true);
+		redoButton.setOnAction((e) -> {
+			try {
+				domain.getOperationHistory().redo(domain.getUndoContext(), null, null);
+			} catch (ExecutionException e1) {
+				e1.printStackTrace();
+			}
+		});
+
+		// add listener to operation history in our domain 
+		// and enable/disable buttons
+		domain.getOperationHistory().addOperationHistoryListener((e) -> {
+			IUndoContext ctx = domain.getUndoContext();
+			undoButton.setDisable(!e.getHistory().canUndo(ctx));
+			redoButton.setDisable(!e.getHistory().canRedo(ctx));
+		});
+
+		return new HBox(10, undoButton, redoButton);
 	}
 
 	public static void main(String[] args) {
