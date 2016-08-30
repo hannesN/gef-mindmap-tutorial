@@ -10,13 +10,19 @@ import org.eclipse.gef.mvc.models.ContentModel;
 import com.google.inject.Guice;
 import com.itemis.gef.tutorial.mindmap.model.SimpleMindMap;
 import com.itemis.gef.tutorial.mindmap.model.SimpleMindMapExampleFactory;
+import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel;
+import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel.Type;
+import com.itemis.gef.tutorial.mindmap.visuals.MindMapNodeVisual;
 
 import javafx.application.Application;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.ToggleButton;
+import javafx.scene.control.ToggleGroup;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 /**
@@ -38,7 +44,7 @@ public class SimpleMindMapApplication extends Application {
 		this.primaryStage = primaryStage;
 		// create domain using guice
 		this.domain = Guice.createInjector(module).getInstance(FXDomain.class);
-
+		
 		// create viewers
 		hookViewers();
 
@@ -91,12 +97,53 @@ public class SimpleMindMapApplication extends Application {
 
 		pane.setTop(createButtonBar());
 		pane.setCenter(getContentViewer().getCanvas());
+		pane.setRight(createToolPalette());
 
 		pane.setMinWidth(800);
 		pane.setMinHeight(600);
 		
 		Scene scene = new Scene(pane);
 		primaryStage.setScene(scene);
+	}
+	
+	private Node createToolPalette() {
+		ItemCreationModel creationModel = getContentViewer().getAdapter(ItemCreationModel.class);
+		
+		MindMapNodeVisual graphic = new MindMapNodeVisual();
+		graphic.setTitle("New Node");
+		
+		// the toggleGroup makes sure, we only select one 
+		ToggleGroup toggleGroup = new ToggleGroup();
+		
+		ToggleButton createNode = new ToggleButton("", graphic);
+		createNode.setToggleGroup(toggleGroup);
+		createNode.selectedProperty().addListener((e, oldVal, newVal) -> {
+			Type type =Type.None;
+			if (newVal) {
+				type = Type.Node;
+			}
+			creationModel.setType(type);
+		});
+
+		
+		// now listen to changes in the model, and deactivate buttons, if necessary
+		creationModel.getTypeProperty().addListener((e, oldVal, newVal) -> {
+			if (oldVal==newVal) {
+				return;
+			}
+			switch (newVal) {
+			case Node:
+				break;
+			case None:
+			default:
+				// unselect the button
+				toggleGroup.getSelectedToggle().setSelected(false);
+				break;
+			
+			}
+		});
+		
+		return new VBox(20, createNode);
 	}
 
 	/**

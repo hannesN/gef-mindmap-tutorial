@@ -1,6 +1,7 @@
 package com.itemis.gef.tutorial.mindmap;
 
 import org.eclipse.gef.common.adapt.AdapterKey;
+import org.eclipse.gef.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef.common.adapt.inject.AdapterMaps;
 import org.eclipse.gef.mvc.fx.MvcFxModule;
 import org.eclipse.gef.mvc.fx.behaviors.FXHoverBehavior;
@@ -15,13 +16,16 @@ import org.eclipse.gef.mvc.fx.policies.FXTransformPolicy;
 import org.eclipse.gef.mvc.fx.policies.FXTranslateSelectedOnDragPolicy;
 import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.providers.ShapeOutlineProvider;
+import org.eclipse.gef.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef.mvc.parts.IContentPartFactory;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
+import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapNodePart;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapPartsFactory;
 import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapAnchorProvider;
+import com.itemis.gef.tutorial.mindmap.policies.CreateNewNodeOnClickPolicy;
 import com.itemis.gef.tutorial.mindmap.policies.SimpleMindMapResizePolicy;
 
 import javafx.scene.Node;
@@ -45,6 +49,9 @@ public class SimpleMindMapModul extends MvcFxModule {
 		// with this binding we create the handles
 		bindFXSquareSegmentHandlePartPartAdapter(
 				AdapterMaps.getAdapterMapBinder(binder(), FXSquareSegmentHandlePart.class));
+		
+		// scoping the creation model
+		bindItemCreationModel();
 	}
 
 	/**
@@ -97,6 +104,9 @@ public class SimpleMindMapModul extends MvcFxModule {
 		// binding a hover behavior to the root part. it will react to
 		// HoverModel changes and render the hover part
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverBehavior.class);
+		
+		// Adding the create Node policy
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateNewNodeOnClickPolicy.class);
 	}
 
 	@Override
@@ -111,6 +121,13 @@ public class SimpleMindMapModul extends MvcFxModule {
 		// and changing the focus and selection model
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
 	}
+	
+	@Override
+	protected void bindContentViewerAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		super.bindContentViewerAdapters(adapterMapBinder);
+		// bind the model to the content viewer
+		bindItemCreationModelAsContentViewerAdapter(adapterMapBinder);
+	}
 
 	/**
 	 * Binds the parts of the selection handles (the squares in the corner) to policies
@@ -121,5 +138,20 @@ public class SimpleMindMapModul extends MvcFxModule {
 		adapterMapBinder.addBinding(AdapterKey.defaultRole())
 				.to(FXResizeTranslateFirstAnchorageOnHandleDragPolicy.class);
 	}
+	
+	/**
+	 * Binds the 
+	 * @param adapterMapBinder
+	 */
+	protected void bindItemCreationModelAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		AdapterKey<ItemCreationModel> key = AdapterKey.get(ItemCreationModel.class);
+		adapterMapBinder.addBinding(key).to(ItemCreationModel.class);
+	}
 
+	/**
+	 * Scoping the ItemCreationModel in the FXViewer class
+	 */
+	protected void bindItemCreationModel() {
+		binder().bind(ItemCreationModel.class).in(AdaptableScopes.typed(FXViewer.class));
+	}
 }
