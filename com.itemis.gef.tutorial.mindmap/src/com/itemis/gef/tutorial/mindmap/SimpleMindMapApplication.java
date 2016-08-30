@@ -117,10 +117,23 @@ public class SimpleMindMapApplication extends Application {
 		
 		ToggleButton createNode = new ToggleButton("", graphic);
 		createNode.setToggleGroup(toggleGroup);
+		createNode.setMaxWidth(Double.MAX_VALUE);
 		createNode.selectedProperty().addListener((e, oldVal, newVal) -> {
 			Type type =Type.None;
 			if (newVal) {
 				type = Type.Node;
+			}
+			creationModel.setType(type);
+		});
+
+		ToggleButton createConn = new ToggleButton("New Connection");
+		createConn.setToggleGroup(toggleGroup);
+		createConn.setMaxWidth(Double.MAX_VALUE);
+		createConn.setMinHeight(50);
+		createConn.selectedProperty().addListener((e, oldVal, newVal) -> {
+			Type type = Type.None;
+			if (newVal) {
+				type = Type.Connection;
 			}
 			creationModel.setType(type);
 		});
@@ -133,6 +146,7 @@ public class SimpleMindMapApplication extends Application {
 			}
 			switch (newVal) {
 			case Node:
+			case Connection:
 				break;
 			case None:
 			default:
@@ -143,7 +157,7 @@ public class SimpleMindMapApplication extends Application {
 			}
 		});
 		
-		return new VBox(20, createNode);
+		return new VBox(20, createNode, createConn);
 	}
 
 	/**
