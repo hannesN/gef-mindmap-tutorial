@@ -6,8 +6,13 @@ import org.eclipse.gef.mvc.fx.MvcFxModule;
 import org.eclipse.gef.mvc.fx.behaviors.FXHoverBehavior;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultHoverFeedbackPartFactory;
 import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
+import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
+import org.eclipse.gef.mvc.fx.parts.FXSquareSegmentHandlePart;
 import org.eclipse.gef.mvc.fx.policies.FXFocusAndSelectOnClickPolicy;
 import org.eclipse.gef.mvc.fx.policies.FXHoverOnHoverPolicy;
+import org.eclipse.gef.mvc.fx.policies.FXResizeTranslateFirstAnchorageOnHandleDragPolicy;
+import org.eclipse.gef.mvc.fx.policies.FXTransformPolicy;
+import org.eclipse.gef.mvc.fx.policies.FXTranslateSelectedOnDragPolicy;
 import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.providers.ShapeOutlineProvider;
 import org.eclipse.gef.mvc.parts.IContentPartFactory;
@@ -17,6 +22,7 @@ import com.google.inject.multibindings.MapBinder;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapNodePart;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapPartsFactory;
 import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapAnchorProvider;
+import com.itemis.gef.tutorial.mindmap.policies.SimpleMindMapResizePolicy;
 
 import javafx.scene.Node;
 
@@ -35,6 +41,10 @@ public class SimpleMindMapModul extends MvcFxModule {
 		super.configure();
 
 		bindMindMapNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), MindMapNodePart.class));
+
+		// with this binding we create the handles
+		bindFXSquareSegmentHandlePartPartAdapter(
+				AdapterMaps.getAdapterMapBinder(binder(), FXSquareSegmentHandlePart.class));
 	}
 
 	/**
@@ -55,6 +65,19 @@ public class SimpleMindMapModul extends MvcFxModule {
 		// provides a selection feedback to the shape
 		role = AdapterKey.role(FXDefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER);
 		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
+
+		// adding a translation policy to move the node around
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXTransformPolicy.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXTranslateSelectedOnDragPolicy.class);
+
+		// specify the factory to create the geometry object for the selection
+		// handles
+		role = AdapterKey.role(FXDefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER);
+		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
+
+		// bind the resize policy to the MindMapNodePart
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(SimpleMindMapResizePolicy.class);
+
 	}
 
 	@Override
@@ -88,4 +111,15 @@ public class SimpleMindMapModul extends MvcFxModule {
 		// and changing the focus and selection model
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
 	}
+
+	/**
+	 * Binds the parts of the selection handles (the squares in the corner) to policies
+	 * @param adapterMapBinder
+	 */
+	protected void bindFXSquareSegmentHandlePartPartAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		// 
+		adapterMapBinder.addBinding(AdapterKey.defaultRole())
+				.to(FXResizeTranslateFirstAnchorageOnHandleDragPolicy.class);
+	}
+
 }

@@ -3,15 +3,20 @@ package com.itemis.gef.tutorial.mindmap.parts;
 import java.util.Collections;
 import java.util.List;
 
+import org.eclipse.gef.geometry.planar.AffineTransform;
+import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.geometry.planar.Rectangle;
 import org.eclipse.gef.mvc.fx.parts.AbstractFXContentPart;
 import org.eclipse.gef.mvc.fx.policies.FXTransformPolicy;
+import org.eclipse.gef.mvc.parts.IResizableContentPart;
+import org.eclipse.gef.mvc.parts.ITransformableContentPart;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
 import com.itemis.gef.tutorial.mindmap.model.MindMapNode;
 import com.itemis.gef.tutorial.mindmap.visuals.MindMapNodeVisual;
 
+import javafx.scene.Node;
 import javafx.scene.transform.Affine;
 
 /**
@@ -21,7 +26,7 @@ import javafx.scene.transform.Affine;
  * @author hniederhausen
  *
  */
-public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual>  {
+public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> implements  ITransformableContentPart<Node, MindMapNodeVisual>, IResizableContentPart<Node, MindMapNodeVisual> {
 
 	@Override
 	public MindMapNode getContent() {
@@ -63,6 +68,20 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual>  {
 		affine.setTx(rec.getX());
 		affine.setTy(rec.getY());
 
+	}
+
+	@Override
+	public void transformContent(AffineTransform transform) {
+		// storing the  new position
+		Rectangle bounds = getContent().getBounds();
+		bounds = bounds.getTranslated(transform.getTranslateX(), transform.getTranslateY());
+		getContent().setBounds(bounds);
+	}
+
+	@Override
+	public void resizeContent(Dimension size) {
+		// storing the new size
+		getContent().getBounds().setSize(size);		
 	}
 
 
