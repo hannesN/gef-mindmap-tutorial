@@ -14,6 +14,13 @@ import com.itemis.gef.tutorial.mindmap.visuals.MindMapNodeVisual;
 
 import javafx.scene.transform.Affine;
 
+/**
+ * the {@link MindMapNodePart} is responsible to create and update the {@link MindMapNodeVisual} for
+ * a instance of the {@link MindMapNode}.
+ * 
+ * @author hniederhausen
+ *
+ */
 public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual>  {
 
 	@Override
@@ -23,11 +30,13 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual>  {
 
 	@Override
 	protected SetMultimap<? extends Object, String> doGetContentAnchorages() {
+		// Nothing to anchor to
 		return HashMultimap.create();
 	}
 
 	@Override
 	protected List<? extends Object> doGetContentChildren() {
+		// we don't have any children.
 		return Collections.emptyList();
 	}
 
@@ -39,6 +48,8 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual>  {
 	@Override
 	protected void doRefreshVisual(MindMapNodeVisual visual) {
 
+		// updateing the visuals texts and position
+		
 		MindMapNode node = getContent();
 		Rectangle rec = node.getBounds();
 

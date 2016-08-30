@@ -32,7 +32,7 @@ public class SimpleMindMapExampleFactory {
 		mindMap.addChildElement(center);
 		
 		MindMapNode child = null;
-		for (int i=0; i<5; i++) {
+		for (int i=0; i<3; i++) {
 			child = new MindMapNode();
 			child.setTite("Association #"+i);
 			child.setDescription("I just realized, this is related to the core idea!");
@@ -50,7 +50,7 @@ public class SimpleMindMapExampleFactory {
 		child2.setTite("Association #4-2");
 		child2.setDescription("I just realized, this is related to the last idea!");
 		child2.setColor(Color.LIGHTGRAY);
-		child2.setBounds(new Rectangle(250,  550, 100, 100));
+		child2.setBounds(new Rectangle(450,  50, 100, 100));
 		mindMap.addChildElement(child2);
 		
 		MindMapConnection conn = new MindMapConnection();

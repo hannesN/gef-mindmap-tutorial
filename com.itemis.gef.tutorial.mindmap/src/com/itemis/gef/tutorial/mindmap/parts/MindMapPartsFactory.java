@@ -14,6 +14,13 @@ import com.itemis.gef.tutorial.mindmap.model.MindMapNode;
 
 import javafx.scene.Node;
 
+/**
+ * The {@link MindMapPartsFactory} creates a Part for the mind map models, based on the type of
+ * the model instance.
+ * 
+ * @author hniederhausen
+ *
+ */
 public class MindMapPartsFactory implements IContentPartFactory<Node> {
 	
 	@Inject
@@ -34,9 +41,8 @@ public class MindMapPartsFactory implements IContentPartFactory<Node> {
 		} else if (content instanceof MindMapConnection) {
 			return injector.getInstance(MindMapConnectionPart.class);
 		} else {
-			throw new IllegalArgumentException("Uknwon content type <"+content.getClass().getName()+">");
+			throw new IllegalArgumentException("Unknown content type <"+content.getClass().getName()+">");
 		}
 		
 	}
-
 }

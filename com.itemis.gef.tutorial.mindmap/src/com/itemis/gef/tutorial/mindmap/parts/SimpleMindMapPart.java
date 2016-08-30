@@ -14,6 +14,15 @@ import com.itemis.gef.tutorial.mindmap.model.SimpleMindMap;
 import javafx.scene.Group;
 import javafx.scene.Node;
 
+
+/**
+ * 
+ * The {@link SimpleMindMapPart} is responsible to create a visual for the {@link SimpleMindMap} and
+ * manage the children of the mind map. 
+ * 
+ * @author hniederhausen
+ *
+ */
 public class SimpleMindMapPart extends AbstractFXContentPart<Group> {
 
 	@Override

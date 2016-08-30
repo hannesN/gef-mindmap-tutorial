@@ -18,6 +18,13 @@ import com.itemis.gef.tutorial.mindmap.visuals.MindMapConnectionVisual;
 
 import javafx.scene.Node;
 
+/**
+ * The mind map connection part is used the controller for th {@link MindMapConnection}.
+ * It create the {@link MindMapConnectionVisual} including the anchors for the connection.
+ * 
+ * @author hniederhausen
+ *
+ */
 public class MindMapConnectionPart extends AbstractFXContentPart<Connection> {
 		
 		private static final String START_ROLE = "START";
