@@ -27,6 +27,7 @@ import com.itemis.gef.tutorial.mindmap.parts.MindMapPartsFactory;
 import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapAnchorProvider;
 import com.itemis.gef.tutorial.mindmap.policies.CreateNewConnectiononClickPolicy;
 import com.itemis.gef.tutorial.mindmap.policies.CreateNewNodeOnClickPolicy;
+import com.itemis.gef.tutorial.mindmap.policies.ShowMindMapNodeContextMenuOnClickPolicy;
 import com.itemis.gef.tutorial.mindmap.policies.SimpleMindMapResizePolicy;
 
 import javafx.scene.Node;
@@ -88,6 +89,9 @@ public class SimpleMindMapModul extends MvcFxModule {
 
 		// bind create connection policy
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateNewConnectiononClickPolicy.class);
+		
+		// bind the context menu policy to the part
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShowMindMapNodeContextMenuOnClickPolicy.class);
 		
 	}
 
