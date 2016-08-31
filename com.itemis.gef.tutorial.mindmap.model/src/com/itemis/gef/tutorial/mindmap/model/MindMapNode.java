@@ -53,11 +53,11 @@ public class MindMapNode extends AbstractMindMapItem implements Serializable {
 	private List<MindMapConnection> incomingConnections = Lists.newArrayList();
 	private List<MindMapConnection> outgoingConnections = Lists.newArrayList();
 
-	public String getTite() {
+	public String getTitle() {
 		return title;
 	}
 
-	public void setTite(String title) {
+	public void setTitle(String title) {
 		pcs.firePropertyChange(PROP_TITLE, this.title, (this.title = title));
 	}
 
