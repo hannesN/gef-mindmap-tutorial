@@ -21,10 +21,12 @@ import org.eclipse.gef.mvc.parts.IContentPartFactory;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
+import com.itemis.gef.tutorial.mindmap.behaviors.CreateFeedbackBehavior;
 import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapNodePart;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapPartsFactory;
 import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapAnchorProvider;
+import com.itemis.gef.tutorial.mindmap.parts.feedback.CreateFeedbackPartFactory;
 import com.itemis.gef.tutorial.mindmap.policies.CreateNewConnectiononClickPolicy;
 import com.itemis.gef.tutorial.mindmap.policies.CreateNewNodeOnClickPolicy;
 import com.itemis.gef.tutorial.mindmap.policies.ShowMindMapNodeContextMenuOnClickPolicy;
@@ -115,6 +117,9 @@ public class SimpleMindMapModul extends MvcFxModule {
 		
 		// Adding the create Node policy
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateNewNodeOnClickPolicy.class);
+	
+		// adding the creation feedback behavior
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateFeedbackBehavior.class);
 	}
 
 	@Override
@@ -135,6 +140,10 @@ public class SimpleMindMapModul extends MvcFxModule {
 		super.bindContentViewerAdapters(adapterMapBinder);
 		// bind the model to the content viewer
 		bindItemCreationModelAsContentViewerAdapter(adapterMapBinder);
+		
+		// binding the creation feedback part factory using the role, we are using in the behavior
+		AdapterKey<?> role = AdapterKey.role(CreateFeedbackBehavior.CREATE_FEEDBACK_PART_FACTORY);
+		adapterMapBinder.addBinding(role).to(CreateFeedbackPartFactory.class);
 	}
 
 	/**
