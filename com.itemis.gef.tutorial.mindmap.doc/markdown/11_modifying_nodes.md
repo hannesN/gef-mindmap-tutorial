@@ -123,7 +123,7 @@ Also modify `click`.
 		ctxMenu.show((Node) event.getTarget(), event.getScreenX(), event.getScreenY());
 	}
 	
-# Editing the title and description
+## Editing the title and description
 
 To edit the title and the description, again we need operations to execute the changes. Without any comment here are the two almost identical operations:
 
