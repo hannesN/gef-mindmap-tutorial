@@ -151,11 +151,11 @@ Here is the code:
 		private List<MindMapConnection> incomingConnections = Lists.newArrayList();
 		private List<MindMapConnection> outgoingConnections = Lists.newArrayList();
 	
-		public String getTite() {
+		public String getTitle() {
 			return title;
 		}
 	
-		public void setTite(String title) {
+		public void setTitle(String title) {
 			pcs.firePropertyChange(PROP_TITLE, this.title, (this.title = title));
 		}
 	
@@ -301,7 +301,7 @@ Here is the code:
 			SimpleMindMap mindMap = new SimpleMindMap();
 			
 			MindMapNode center = new MindMapNode();
-			center.setTite("The Core Idea");
+			center.setTitle("The Core Idea");
 			center.setDescription("This is my Core idea. I need a larger Explanation to it, so I can test the warpping.");
 			center.setColor(Color.GREENYELLOW);
 			center.setBounds(new Rectangle(20,  50, 100, 100));
@@ -315,7 +315,7 @@ Here is the code:
 			SimpleMindMap mindMap = new SimpleMindMap();
 			
 			MindMapNode center = new MindMapNode();
-			center.setTite("The Core Idea");
+			center.setTitle("The Core Idea");
 			center.setDescription("This is my Core idea");
 			center.setColor(Color.GREENYELLOW);
 			center.setBounds(new Rectangle(250,  50, 100, 100));
@@ -325,7 +325,7 @@ Here is the code:
 			MindMapNode child = null;
 			for (int i=0; i<5; i++) {
 				child = new MindMapNode();
-				child.setTite("Association #"+i);
+				child.setTitle("Association #"+i);
 				child.setDescription("I just realized, this is related to the core idea!");
 				child.setColor(Color.ALICEBLUE);
 				
@@ -338,7 +338,7 @@ Here is the code:
 			}
 			
 			MindMapNode child2 = new MindMapNode();
-			child2.setTite("Association #4-2");
+			child2.setTitle("Association #4-2");
 			child2.setDescription("I just realized, this is related to the last idea!");
 			child2.setColor(Color.LIGHTGRAY);
 			child2.setBounds(new Rectangle(250,  550, 100, 100));

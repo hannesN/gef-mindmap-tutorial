@@ -177,7 +177,7 @@ here is the code:
 				Point2D mouseInLocal = part.getVisual().sceneToLocal(e.getSceneX(), e.getSceneY());
 		
 				MindMapNode newNode = new MindMapNode();
-				newNode.setTite("New node");
+				newNode.setTitle("New node");
 				newNode.setDescription("no description");
 				newNode.setColor(Color.GREENYELLOW);
 				newNode.setBounds(new Rectangle(mouseInLocal.getX(), mouseInLocal.getY(), 50, 30));

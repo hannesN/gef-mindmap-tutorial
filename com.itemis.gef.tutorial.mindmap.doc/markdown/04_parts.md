@@ -167,7 +167,7 @@ Here is the code:
 			MindMapNode node = getContent();
 			Rectangle rec = node.getBounds();
 	
-			visual.setTitle(node.getTite());
+			visual.setTitle(node.getTitle());
 			visual.setDescription(node.getDescription());
 			visual.setColor(node.getColor());
 	
