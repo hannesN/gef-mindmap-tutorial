@@ -70,7 +70,7 @@ public class SimpleMindMapApplication extends Application {
 	private void populateViewerContents() {
 		SimpleMindMapExampleFactory fac = new SimpleMindMapExampleFactory();
 
-		SimpleMindMap mindMap = fac.createComplexExample();
+		SimpleMindMap mindMap = fac.createSingleNodeExample();
 
 		FXViewer viewer = getContentViewer();
 

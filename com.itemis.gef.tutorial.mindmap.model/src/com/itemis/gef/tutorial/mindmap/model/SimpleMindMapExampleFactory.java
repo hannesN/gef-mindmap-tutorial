@@ -17,6 +17,8 @@ public class SimpleMindMapExampleFactory {
 		
 		mindMap.addChildElement(center);
 		
+		mindMap.addChildElement(createComplexExample());
+		
 		return mindMap;
 	}
 	
@@ -56,6 +58,7 @@ public class SimpleMindMapExampleFactory {
 		MindMapConnection conn = new MindMapConnection();
 		conn.connect(child, child2);
 		mindMap.addChildElement(conn);
+		
 		
 		return mindMap;
 		
