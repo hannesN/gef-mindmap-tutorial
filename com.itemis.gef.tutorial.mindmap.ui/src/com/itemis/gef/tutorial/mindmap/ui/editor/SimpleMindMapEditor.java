@@ -47,12 +47,8 @@ import javafx.scene.paint.Color;
  */
 public class SimpleMindMapEditor extends AbstractFXEditor {
 
-	
-	
 	public SimpleMindMapEditor() {
-		super(Guice.createInjector(
-				Modules.override(new SimpleMindMapModul())
-				.with(new MvcFxUiModule())));
+		super(Guice.createInjector(Modules.override(new SimpleMindMapModul()).with(new MvcFxUiModule())));
 	}
 
 	@Override
@@ -98,14 +94,14 @@ public class SimpleMindMapEditor extends AbstractFXEditor {
 			mindmap = (SimpleMindMap) is.readObject();
 			is.close();
 			setPartName(file.getName());
-			
+
 			// reset default color, because we didn't save the color
 			for (AbstractMindMapItem item : mindmap.getChildElements()) {
 				if (item instanceof MindMapNode) {
 					((MindMapNode) item).setColor(Color.GREENYELLOW);
 				}
 			}
-			
+
 		} catch (EOFException e) {
 			// create new SimpleMindMap...
 			mindmap = new SimpleMindMap();
@@ -115,44 +111,42 @@ public class SimpleMindMapEditor extends AbstractFXEditor {
 		ContentModel contentModel = getDomain().getAdapter(IViewer.class).getAdapter(ContentModel.class);
 		contentModel.getContents().setAll(Collections.singletonList(mindmap));
 	}
-	
+
 	/**
 	 * Creating JavaFX widgets and set them to the stage.
 	 */
 	@Override
 	protected void hookViewers() {
-		
+
 		final FXViewer contentViewer = getContentViewer();
-		
-		
+
 		// creating parent pane for Canvas and button pane
 		BorderPane pane = new BorderPane();
 
-		
 		pane.setCenter(contentViewer.getCanvas());
 		pane.setRight(createToolPalette());
 
 		pane.setMinWidth(800);
 		pane.setMinHeight(600);
-		
+
 		Scene scene = new Scene(pane);
 		getCanvas().setScene(scene);
 	}
-	
+
 	private Node createToolPalette() {
 		ItemCreationModel creationModel = getContentViewer().getAdapter(ItemCreationModel.class);
-		
+
 		MindMapNodeVisual graphic = new MindMapNodeVisual();
 		graphic.setTitle("New Node");
-		
-		// the toggleGroup makes sure, we only select one 
+
+		// the toggleGroup makes sure, we only select one
 		ToggleGroup toggleGroup = new ToggleGroup();
-		
+
 		ToggleButton createNode = new ToggleButton("", graphic);
 		createNode.setToggleGroup(toggleGroup);
 		createNode.setMaxWidth(Double.MAX_VALUE);
 		createNode.selectedProperty().addListener((e, oldVal, newVal) -> {
-			Type type =Type.None;
+			Type type = Type.None;
 			if (newVal) {
 				type = Type.Node;
 			}
@@ -171,10 +165,10 @@ public class SimpleMindMapEditor extends AbstractFXEditor {
 			creationModel.setType(type);
 		});
 
-		
-		// now listen to changes in the model, and deactivate buttons, if necessary
+		// now listen to changes in the model, and deactivate buttons, if
+		// necessary
 		creationModel.getTypeProperty().addListener((e, oldVal, newVal) -> {
-			if (oldVal==newVal) {
+			if (oldVal == newVal) {
 				return;
 			}
 			switch (newVal) {
@@ -186,10 +180,10 @@ public class SimpleMindMapEditor extends AbstractFXEditor {
 				// unselect the button
 				toggleGroup.getSelectedToggle().setSelected(false);
 				break;
-			
+
 			}
 		});
-		
+
 		return new VBox(20, createNode, createConn);
 	}
 }
