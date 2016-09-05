@@ -26,32 +26,7 @@ We will use the integration build of GEF. The README in the github repository of
 3. Open the target definition file with a text editor, by chosing  *Open With->Text Editor* in the files context menu. 
 4. Copy the following text into the file, save and close the editor.
 
-	<?xml version="1.0" encoding="UTF-8" standalone="no"?>
-	<?pde version="3.8"?><target name="gef-integration" sequenceNumber="1">
-	<locations>
-	  <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-	    <unit id="org.eclipse.xtext.sdk.feature.group" version="2.10.0.v201605250459"/>
-	    <unit id="org.eclipse.emf.sdk.feature.group" version="2.12.0.v20160526-0356"/>
-	    <unit id="org.eclipse.sdk.ide" version="4.6.0.I20160606-1100"/>
-	    <repository location="http://download.eclipse.org/releases/neon"/>
-	  </location>
-	  <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
-	    <unit id="org.eclipse.gef.common.sdk.feature.group" version="0.0.0"/>
-	    <unit id="org.eclipse.gef.geometry.sdk.feature.group" version="0.0.0"/>
-	    <unit id="org.eclipse.gef.fx.sdk.feature.group" version="0.0.0"/>
-	    <unit id="org.eclipse.gef.mvc.sdk.feature.group" version="0.0.0"/>
-	    <unit id="org.eclipse.gef.mvc.examples.source.feature.group" version="0.0.0"/>
-	    <unit id="org.eclipse.gef.layout.sdk.feature.group" version="0.0.0"/>
-	    <unit id="org.eclipse.gef.graph.sdk.feature.group" version="0.0.0"/>
-	    <unit id="org.eclipse.gef.zest.sdk.feature.group" version="0.0.0"/>
-	    <unit id="org.eclipse.gef.zest.examples.source.feature.group" version="0.0.0"/>
-	    <unit id="org.eclipse.gef.dot.sdk.feature.group" version="0.0.0"/>
-	    <unit id="org.eclipse.gef.cloudio.sdk.feature.group" version="0.0.0"/>
-	    <repository location="http://download.eclipse.org/tools/gef/updates/integration"/>
-	  </location>
-	</locations>
-	</target>
-
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step1_preparation/com.itemis.gef.tutorial.mindmap.target/gef.target"></script>
 
 5. Now open the target definition with the target editor (*Open With->Target Editor* in the context menu)
 6. It will take some time to resolve the target definition. Please be patient. You can see the status in the progress view.

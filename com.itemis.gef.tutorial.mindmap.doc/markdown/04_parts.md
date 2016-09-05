@@ -26,6 +26,10 @@ Go to the tab `Manifest.MF` and copy the following text into the file.
 	 com.google.inject.multibindings;version="1.3.0",
 	 javax.inject;version="1.0.0"
 
+The final manifest should be look like this:
+
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/META-INF/MANIFEST.MF"></script> 
+
 Alternatively, you can set the dependencies on the `Dependencies` tab manually.
 
 ## Creating the parts
@@ -38,80 +42,7 @@ If you recall, we didn't create a visual for `SimpleMindMap`. We will use a Java
 
 See the following code:
 
-	package com.itemis.gef.tutorial.mindmap.parts;
-
-	import java.util.List;
-	
-	import org.eclipse.gef.mvc.fx.parts.AbstractFXContentPart;
-	import org.eclipse.gef.mvc.parts.IVisualPart;
-	
-	import com.google.common.collect.HashMultimap;
-	import com.google.common.collect.Lists;
-	import com.google.common.collect.SetMultimap;
-	import com.itemis.gef.tutorial.mindmap.model.AbstractMindMapItem;
-	import com.itemis.gef.tutorial.mindmap.model.SimpleMindMap;
-	
-	import javafx.scene.Group;
-	import javafx.scene.Node;
-	
-	public class SimpleMindMapPart extends AbstractFXContentPart<Group> {
-	
-		@Override
-		public SimpleMindMap getContent() {
-			return (SimpleMindMap) super.getContent();
-		}
-	
-		@Override
-		protected SetMultimap<? extends Object, String> doGetContentAnchorages() {
-			return HashMultimap.create();
-		}
-	
-		@Override
-		protected List<? extends Object> doGetContentChildren() {
-			return Lists.newArrayList(getContent().getChildElements());
-		}
-	
-		@Override
-		protected Group createVisual() {
-			// the visual is just a container for our child visuals (nodes and
-			// connections)
-			return new Group();
-		}
-	
-		@Override
-		protected void addChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
-			getVisual().getChildren().add(child.getVisual());
-		}
-	
-		@Override
-		protected void removeChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
-			getVisual().getChildren().remove(child.getVisual());
-		}
-	
-		@Override
-		protected void doAddContentChild(Object contentChild, int index) {
-			if (contentChild instanceof AbstractMindMapItem) {
-				getContent().addChildElement((AbstractMindMapItem) contentChild, index);
-			} else {
-				throw new IllegalArgumentException("contentChild has invalid type: " + contentChild.getClass());
-			}
-		}
-	
-		@Override
-		protected void doRemoveContentChild(Object contentChild) {
-			if (contentChild instanceof AbstractMindMapItem) {
-				getContent().removeChildElement((AbstractMindMapItem) contentChild);
-			} else {
-				throw new IllegalArgumentException("contentChild has invalid type: " + contentChild.getClass());
-			}
-		}
-	
-		@Override
-		protected void doRefreshVisual(Group visual) {
-			// no refreshing necessary, just a Group
-		}
-	}
-
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/parts/SimpleMindMapPart.java"></script>
 	
 This part uses a `javafx.scene.Group` node as visual representation, which is created in the method called `createVisual`. The rest of the methods is
 used to manage changes in the model or view. The model is called the content of the part. If you wonder, where the content is set, we'll come to that later.
@@ -123,63 +54,7 @@ The `MindMapNodePart` represents one node in our map. It creates the `MindMapNod
 
 Here is the code:
 
-	package com.itemis.gef.tutorial.mindmap.parts;
-	
-	import java.util.Collections;
-	import java.util.List;
-	
-	import org.eclipse.gef.geometry.planar.Rectangle;
-	import org.eclipse.gef.mvc.fx.parts.AbstractFXContentPart;
-	import org.eclipse.gef.mvc.fx.policies.FXTransformPolicy;
-	
-	import com.google.common.collect.HashMultimap;
-	import com.google.common.collect.SetMultimap;
-	import com.itemis.gef.tutorial.mindmap.model.MindMapNode;
-	import com.itemis.gef.tutorial.mindmap.visuals.MindMapNodeVisual;
-	
-	import javafx.scene.transform.Affine;
-	
-	public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual>  {
-	
-		@Override
-		public MindMapNode getContent() {
-			return (MindMapNode) super.getContent();
-		}
-	
-		@Override
-		protected SetMultimap<? extends Object, String> doGetContentAnchorages() {
-			return HashMultimap.create();
-		}
-	
-		@Override
-		protected List<? extends Object> doGetContentChildren() {
-			return Collections.emptyList();
-		}
-	
-		@Override
-		protected MindMapNodeVisual createVisual() {
-			return new MindMapNodeVisual();
-		}
-	
-		@Override
-		protected void doRefreshVisual(MindMapNodeVisual visual) {
-	
-			MindMapNode node = getContent();
-			Rectangle rec = node.getBounds();
-	
-			visual.setTitle(node.getTitle());
-			visual.setDescription(node.getDescription());
-			visual.setColor(node.getColor());
-	
-			visual.resizeShape(rec.getWidth(), rec.getHeight());
-	
-			Affine affine = getAdapter(FXTransformPolicy.TRANSFORM_PROVIDER_KEY).get();
-			affine.setTx(rec.getX());
-			affine.setTy(rec.getY());
-	
-		}
-	}
-
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/parts/MindMapNodePart.java"></script>
 	
 ### MindMapConnectionPart
 
@@ -187,94 +62,7 @@ The `MindMapConnectionpart` represents a connection. It creates a `MindMapConnec
 
 Here is the code:
 
-	package com.itemis.gef.tutorial.mindmap.parts;
-	
-	import java.util.Collections;
-	import java.util.List;
-	
-	import org.eclipse.gef.common.adapt.AdapterKey;
-	import org.eclipse.gef.fx.anchors.IAnchor;
-	import org.eclipse.gef.fx.nodes.Connection;
-	import org.eclipse.gef.mvc.fx.parts.AbstractFXContentPart;
-	import org.eclipse.gef.mvc.parts.IVisualPart;
-	
-	import com.google.common.collect.HashMultimap;
-	import com.google.common.collect.SetMultimap;
-	import com.google.common.reflect.TypeToken;
-	import com.google.inject.Provider;
-	import com.itemis.gef.tutorial.mindmap.model.MindMapConnection;
-	import com.itemis.gef.tutorial.mindmap.visuals.MindMapConnectionVisuals;
-	
-	import javafx.scene.Node;
-	
-	public class MindMapConnectionPart extends AbstractFXContentPart<Connection> {
-			
-			private static final String START_ROLE = "START";
-			private static final String END_ROLE = "END";
-			
-			@Override
-			public MindMapConnection getContent() {
-				return (MindMapConnection) super.getContent();
-			}
-			
-			@Override
-			protected SetMultimap<? extends Object, String> doGetContentAnchorages() {
-				SetMultimap<Object, String> anchorages = HashMultimap.create();
-	
-				anchorages.put(getContent().getSource(), START_ROLE);
-				anchorages.put(getContent().getTarget(), END_ROLE);
-	
-				return anchorages;
-			}
-	
-			@Override
-			protected List<? extends Object> doGetContentChildren() {
-				return Collections.emptyList();
-			}
-	
-			@Override
-			protected Connection createVisual() {
-				return new MindMapConnectionVisuals();
-			}
-	
-			@Override
-			protected void doRefreshVisual(Connection visual) {
-				// nothing to do here
-			}
-			
-			@Override
-			protected void attachToAnchorageVisual(IVisualPart<Node, ? extends Node> anchorage, String role) {
-				
-				// find a anchor provider, which must be registered in the module
-				// be aware to use the right interfaces (Proviser is used a lot)
-				@SuppressWarnings("serial")
-				Provider<? extends IAnchor> adapter = anchorage.getAdapter(AdapterKey.get(new TypeToken<Provider<? extends IAnchor>>() {}));
-				if (adapter == null) {
-					throw new IllegalStateException("No adapter  found for <" + anchorage.getClass() + "> found.");
-				}
-				IAnchor anchor = adapter.get();
-				
-				if (role.equals(START_ROLE)) {
-					getVisual().setStartAnchor(anchor);
-				} else if (role.equals(END_ROLE)) {
-					getVisual().setEndAnchor(anchor);
-				} else {
-					throw new IllegalArgumentException("Invalid role: "+role);
-				}
-			}
-	
-			@Override
-			protected void detachFromAnchorageVisual(IVisualPart<Node, ? extends Node> anchorage, String role) {
-				if (role.equals(START_ROLE)) {
-					getVisual().setStartPoint(getVisual().getStartPoint());
-				} else if (role.equals(END_ROLE)) {
-					getVisual().setEndPoint(getVisual().getEndPoint());
-				} else {
-					throw new IllegalArgumentException("Invalid role: "+role);
-				}
-			}
-	}
-
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/parts/MindMapConnectionPart.java"></script>
 
 The method `doGetContentAnchorages` tells the framework, with which nodes the connection is connected. Each object gets a role. In our case we have a start anchorage (the source) and an end anchorage (the target of the connection).
 For each anchorage the method `attachToAnchorageVisual` is called. First an anchor provider is retrieved from the part, via `getAdapter`, which eeds to be configured in the module (see below).
@@ -288,47 +76,7 @@ A `IContentPartFactory` is used to create a part and set its content. GEF takes 
 
 Here is the code:
 
-	package com.itemis.gef.tutorial.mindmap.parts;
-	
-	import java.util.Map;
-	
-	import org.eclipse.gef.mvc.behaviors.IBehavior;
-	import org.eclipse.gef.mvc.parts.IContentPart;
-	import org.eclipse.gef.mvc.parts.IContentPartFactory;
-	
-	import com.google.inject.Inject;
-	import com.google.inject.Injector;
-	import com.itemis.gef.tutorial.mindmap.model.MindMapConnection;
-	import com.itemis.gef.tutorial.mindmap.model.SimpleMindMap;
-	import com.itemis.gef.tutorial.mindmap.model.MindMapNode;
-	
-	import javafx.scene.Node;
-	
-	public class MindMapPartsFactory implements IContentPartFactory<Node> {
-		
-		@Inject
-		private Injector injector;
-		
-		@Override
-		public IContentPart<Node, ? extends Node> createContentPart(Object content, IBehavior<Node> contextBehavior,
-				Map<Object, Object> contextMap) {
-	
-			
-			if (content==null)
-				throw new IllegalArgumentException("Content must not be null!");
-			
-			if (content instanceof SimpleMindMap) {
-				return injector.getInstance(SimpleMindMapPart.class);
-			} else if (content instanceof MindMapNode) {
-				return injector.getInstance(MindMapNodePart.class);
-			} else if (content instanceof MindMapConnection) {
-				return injector.getInstance(MindMapConnectionPart.class);
-			} else {
-				throw new IllegalArgumentException("Unknown content type <"+content.getClass().getName()+">");
-			}
-			
-		}
-	}
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/parts/MindMapPartsFactory.java"></script>
 
 The factory has only one method: `createContentPart`. We are only interested in the `content` right now. Based on the type of the content object, we create a new instance using the injector, which takes care of the dependency injection.
 
@@ -340,68 +88,7 @@ the connection anchors. To be able to do that, we need to provide an anchor prov
 
 Here is the code of the `SimpleMindMapAnchorProvider`:
 
-	package com.itemis.gef.tutorial.mindmap.parts;
-	
-	import org.eclipse.gef.common.adapt.IAdaptable;
-	import org.eclipse.gef.fx.anchors.DynamicAnchor;
-	import org.eclipse.gef.fx.anchors.IAnchor;
-	import org.eclipse.gef.fx.anchors.DynamicAnchor.AnchorageReferenceGeometry;
-	import org.eclipse.gef.geometry.planar.IGeometry;
-	import org.eclipse.gef.mvc.parts.IVisualPart;
-	
-	import com.google.common.reflect.TypeToken;
-	import com.google.inject.Provider;
-	
-	import javafx.beans.binding.ObjectBinding;
-	import javafx.beans.property.ReadOnlyObjectProperty;
-	import javafx.scene.Node;
-	
-	public class SimpleMindMapAnchorProvider extends IAdaptable.Bound.Impl<IVisualPart<Node, ? extends Node>> implements Provider<IAnchor> {
-	
-		private IVisualPart<Node, ? extends Node> host;
-		private DynamicAnchor anchor;
-		
-		@Override
-		public IAnchor get() {
-			if (anchor == null) {
-				Node anchorage = getAdaptable().getVisual();
-				anchor = new DynamicAnchor(anchorage);
-				
-				// what exactly does that mean?
-				anchor.getComputationParameter(AnchorageReferenceGeometry.class).bind(new ObjectBinding<IGeometry>() {
-					{
-						bind(anchorage.layoutBoundsProperty());
-					}
-					
-					@Override
-					protected IGeometry computeValue() {
-						@SuppressWarnings("serial")
-						// get the registered geometry provider from the host
-						Provider<IGeometry> geomProvider = host.getAdapter(new TypeToken<Provider<IGeometry>>() {});
-						
-						return geomProvider.get();
-					}
-				});
-			}
-			return anchor;
-		}
-		
-		@Override
-		public IVisualPart<Node, ? extends Node> getAdaptable() {
-			return host;
-		}
-	
-		@Override
-		public void setAdaptable(IVisualPart<Node, ? extends Node> adaptable) {
-			this.host = adaptable;
-		}
-	
-		@Override
-		public ReadOnlyObjectProperty<IVisualPart<Node, ? extends Node>> adaptableProperty() {
-			return null;
-		}
-	
-	}
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/parts/SimpleMindMapAnchorProvider.java"></script>
 
 The core is the `get`-method. A factory is bound to an instance of `MindMapNodePart`. The get method retrieves the `Visual` of that part and creates a `DynamicAnchor` like we did in step 3.
 
@@ -416,54 +103,8 @@ The GEF module use a name pattern to identify, to what class we are binding righ
 
 Right now our module is small, but will grow in size as we go on with the tutorials. Here is the code:
 
-	package com.itemis.gef.tutorial.mindmap;
-	
-	import org.eclipse.gef.common.adapt.AdapterKey;
-	import org.eclipse.gef.common.adapt.inject.AdapterMaps;
-	import org.eclipse.gef.mvc.fx.MvcFxModule;
-	import org.eclipse.gef.mvc.fx.providers.ShapeOutlineProvider;
-	import org.eclipse.gef.mvc.parts.IContentPartFactory;
-	
-	import com.google.inject.TypeLiteral;
-	import com.google.inject.multibindings.MapBinder;
-	import com.itemis.gef.tutorial.mindmap.parts.MindMapNodePart;
-	import com.itemis.gef.tutorial.mindmap.parts.MindMapPartsFactory;
-	import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapAnchorProvider;
-	
-	import javafx.scene.Node;
-	
-	public class SimpleMindMapModul extends MvcFxModule {
-	
-		@Override
-		protected void configure() {
-			// start the default configuration
-			super.configure();
-			
-			bindMindMapNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), MindMapNodePart.class));
-		}
-		
-		/**
-		 * 
-		 * @param adapterMapBinder
-		 */
-		protected void bindMindMapNodePartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-			// bind anchor provider used to create the connection anchors 
-			adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(SimpleMindMapAnchorProvider.class);
-			
-			// bind a geometry provider, which is used in our anchor provider
-			adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShapeOutlineProvider.class);
-			
-		}
-	
-		@Override
-		protected void bindIContentPartFactoryAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-			super.bindIContentPartFactoryAsContentViewerAdapter(adapterMapBinder);
-			
-			// binding one instance of our factory to the IContentPartFactory type, to be used to create our parts
-			binder().bind(new TypeLiteral<IContentPartFactory<Node>>() {}).toInstance(new MindMapPartsFactory());
-		}
-	}
-	
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/SimpleMindMapModul.java"></script>
+
 	
 ## The Application
 
@@ -471,79 +112,7 @@ Now it's time to see, what our mind amp looks like. We will creating a new Appli
 
 Here is the code:
 
-	package com.itemis.gef.tutorial.mindmap;
-	
-	import org.eclipse.gef.common.adapt.AdapterKey;
-	import org.eclipse.gef.mvc.fx.domain.FXDomain;
-	import org.eclipse.gef.mvc.fx.viewer.FXViewer;
-	import org.eclipse.gef.mvc.models.ContentModel;
-	
-	import com.google.inject.Guice;
-	import com.itemis.gef.tutorial.mindmap.model.SimpleMindMap;
-	import com.itemis.gef.tutorial.mindmap.model.SimpleMindMapExampleFactory;
-	
-	import javafx.application.Application;
-	import javafx.scene.Scene;
-	import javafx.stage.Stage;
-	
-	public class SimpleMindMapApplication extends Application {
-	
-		private Stage primaryStage;
-		private FXDomain domain;
-	
-		@Override
-		public void start(Stage primaryStage) throws Exception {
-	
-			SimpleMindMapModul module = new SimpleMindMapModul();
-			this.primaryStage = primaryStage;
-			// create domain using guice
-			this.domain = Guice.createInjector(module).getInstance(FXDomain.class);
-	
-			// create viewers
-			hookViewers();
-	
-			// set-up stage
-			primaryStage.setResizable(true);
-			primaryStage.setWidth(640);
-			primaryStage.setHeight(480);
-			primaryStage.setTitle("GEF Simple Mindmap");
-			primaryStage.sizeToScene();
-			primaryStage.show();
-	
-			// activate domain
-			domain.activate();
-	
-			// load contents
-			populateViewerContents();
-	
-		}
-	
-		private void populateViewerContents() {
-			SimpleMindMapExampleFactory fac = new SimpleMindMapExampleFactory();
-	
-			SimpleMindMap mindMap = fac.createComplexExample();
-	
-			FXViewer viewer = getContentViewer();
-	
-			viewer.getAdapter(ContentModel.class).getContents().setAll(mindMap);
-	
-		}
-	
-		private FXViewer getContentViewer() {
-			FXViewer viewer = domain.getAdapter(AdapterKey.get(FXViewer.class, FXDomain.CONTENT_VIEWER_ROLE));
-			return viewer;
-		}
-	
-		private void hookViewers() {
-			Scene scene = new Scene(getContentViewer().getCanvas());
-			primaryStage.setScene(scene);
-		}
-	
-		public static void main(String[] args) {
-			Application.launch(args);
-		}
-	
-	}
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/SimpleMindMapApplication.java"></script>
 
 Before we create our scene in `start`we instantiate our Module and create an instance of `FXDomain`. using Guice. Thanks to the default implementation of the `MvcFxModule`.
 The method `getContentViewer` shows, how the dependencies are retrieved, with a role. This time, we want a bound FXViewer with the role `FXDomain.CONTENT_VIEWER_ROLE`.

@@ -10,53 +10,7 @@ The code is mostly JavaFX-Code, which I won't explain in detail.
 
 Here is the code of the policy:
 
-	package com.itemis.gef.tutorial.mindmap.policies;
-	
-	import org.eclipse.core.commands.ExecutionException;
-	import org.eclipse.gef.mvc.fx.policies.IFXOnClickPolicy;
-	import org.eclipse.gef.mvc.parts.IVisualPart;
-	import org.eclipse.gef.mvc.policies.AbstractInteractionPolicy;
-	import org.eclipse.gef.mvc.viewer.IViewer;
-	
-	import com.itemis.gef.tutorial.mindmap.operations.DeleteNodeOperation;
-	import com.itemis.gef.tutorial.mindmap.parts.MindMapNodePart;
-	import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapPart;
-	
-	import javafx.scene.Node;
-	import javafx.scene.control.ContextMenu;
-	import javafx.scene.control.MenuItem;
-	import javafx.scene.input.MouseEvent;
-	
-	public class ShowMindMapNodeContextMenuOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
-	
-		@Override
-		public void click(MouseEvent event) {
-			if (!event.isSecondaryButtonDown()) {
-				return; // only listen to secondary buttons
-			}
-			
-			MenuItem deleteNodeItem = new MenuItem("Delete Node");
-			deleteNodeItem.setOnAction((e) -> {
-				// getting the SimpleMindMapPart
-				IViewer<Node> viewer = getHost().getRoot().getViewer();
-				IVisualPart<Node, ? extends Node> part = viewer.getRootPart().getChildrenUnmodifiable().get(0);
-				
-				if (part instanceof SimpleMindMapPart) {
-					// Creating the operation and executing it in the domain
-					try {
-						DeleteNodeOperation op = new DeleteNodeOperation((SimpleMindMapPart) part, (MindMapNodePart) getHost());
-						viewer.getDomain().execute(op, null);
-					} catch (ExecutionException e1) {
-						e1.printStackTrace();
-					}
-				}
-			});
-			
-			ContextMenu ctxMenu = new ContextMenu(deleteNodeItem);
-			// show the menu at the mouse position
-			ctxMenu.show((Node) event.getTarget(), event.getScreenX(), event.getScreenY());
-		}
-	}
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/tree/step10_deleting_node/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/policies/ShowMindMapNodeContextMenuOnClickPolicy.java"></script>
 
 We check if the secondary (usually right) mouse button is pressed and if so, show the context menu. If the *Delete Node* item is selected,
 we instantiate `DeleteNodeOperation` and execute it.
@@ -64,8 +18,10 @@ we instantiate `DeleteNodeOperation` and execute it.
 
 Now we bind the policy to the MindMapNodeParts in the `SimpleMindMapModule`. Add the following to `bindMindMapNodePartAdapters`:
 
-	// bind the context menu policy to the part
-	adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShowMindMapNodeContextMenuOnClickPolicy.class);
+```java
+// bind the context menu policy to the part
+adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShowMindMapNodeContextMenuOnClickPolicy.class);
+```
 
 ## Delete Node Operations
 
@@ -84,69 +40,7 @@ This is again is a straight forward implementation. We get the `MindMapConnectio
 
 Here is the code:
 
-	package com.itemis.gef.tutorial.mindmap.operations;
-	
-	import org.eclipse.core.commands.ExecutionException;
-	import org.eclipse.core.commands.operations.AbstractOperation;
-	import org.eclipse.core.runtime.IAdaptable;
-	import org.eclipse.core.runtime.IProgressMonitor;
-	import org.eclipse.core.runtime.IStatus;
-	import org.eclipse.core.runtime.Status;
-	import org.eclipse.gef.mvc.operations.ITransactionalOperation;
-	
-	import com.itemis.gef.tutorial.mindmap.model.MindMapConnection;
-	import com.itemis.gef.tutorial.mindmap.model.MindMapNode;
-	import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapPart;
-	
-	public class DeleteConnectionOperation extends AbstractOperation implements ITransactionalOperation {
-	
-		private final MindMapConnection connection;
-		private final MindMapNode source;
-		private final MindMapNode target;
-		private final SimpleMindMapPart parent;
-		
-		private int childIdx;
-		
-		public DeleteConnectionOperation(MindMapConnection connection, SimpleMindMapPart parent) {
-			super("Delete Connection");
-			this.connection = connection;
-			this.source = connection.getSource();
-			this.target = connection.getTarget();
-			this.parent = parent;
-		}
-	
-		@Override
-		public boolean isContentRelevant() {
-			// yes we are removing items from the model
-			return true;
-		}
-	
-		@Override
-		public boolean isNoOp() {
-			return false;
-		}
-	
-		@Override
-		public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-			connection.disconnect();
-			// saving the index to put it back at the right position on undo
-			childIdx = parent.getContentChildrenUnmodifiable().indexOf(connection);
-			parent.removeContentChild(connection);
-			return Status.OK_STATUS;
-		}
-	
-		@Override
-		public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-			return execute(monitor, info);
-		}
-	
-		@Override
-		public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-			connection.connect(source, target);
-			parent.addContentChild(connection, childIdx);
-			return Status.OK_STATUS;
-		}
-	}
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/tree/step10_deleting_node/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/operations/DeleteConnectionOperation.java"></script>
 
 ## Delete Node Operation
 
@@ -157,105 +51,7 @@ After that for each connection, connected with the node, a `DeleteConnectionOper
    
 Here is the code:
 
-	package com.itemis.gef.tutorial.mindmap.operations;
-	
-	import java.util.Collections;
-	import java.util.List;
-	
-	import org.eclipse.core.commands.ExecutionException;
-	import org.eclipse.core.commands.operations.AbstractOperation;
-	import org.eclipse.core.runtime.IAdaptable;
-	import org.eclipse.core.runtime.IProgressMonitor;
-	import org.eclipse.core.runtime.IStatus;
-	import org.eclipse.core.runtime.Status;
-	import org.eclipse.gef.mvc.operations.ChangeFocusOperation;
-	import org.eclipse.gef.mvc.operations.ChangeSelectionOperation;
-	import org.eclipse.gef.mvc.operations.ITransactionalOperation;
-	import org.eclipse.gef.mvc.operations.ReverseUndoCompositeOperation;
-	import org.eclipse.gef.mvc.viewer.IViewer;
-	
-	import com.google.common.collect.Lists;
-	import com.itemis.gef.tutorial.mindmap.model.MindMapConnection;
-	import com.itemis.gef.tutorial.mindmap.model.MindMapNode;
-	import com.itemis.gef.tutorial.mindmap.parts.MindMapNodePart;
-	import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapPart;
-	
-	import javafx.scene.Node;
-	
-	public class DeleteNodeOperation extends ReverseUndoCompositeOperation {
-	
-		public DeleteNodeOperation(SimpleMindMapPart parent, MindMapNodePart nodePart) {
-			super("Delete Node");
-			prepareOperation(parent, nodePart);
-		}
-	
-		private void prepareOperation(SimpleMindMapPart parent, MindMapNodePart nodePart) {
-			IViewer<Node> viewer = parent.getRoot().getViewer();
-			
-			// removing the selections and focus from, to be sure we don't delete any focused
-			// elements
-			add(new ChangeSelectionOperation<Node>(viewer, Collections.emptyList()));
-			add(new ChangeFocusOperation<>(viewer, null));
-			
-			
-			List<MindMapConnection> connections = Lists.newArrayList(nodePart.getContent().getIncomingConnections());
-			connections.addAll(nodePart.getContent().getOutgoingConnections());
-	
-			for (MindMapConnection con : connections) {
-				add(new DeleteConnectionOperation(parent, con));
-			}
-			
-			add(new InternalDeleteNodeOperation(parent, nodePart.getContent()));
-		}
-	
-		
-		private class InternalDeleteNodeOperation extends AbstractOperation implements ITransactionalOperation {
-	
-			private final SimpleMindMapPart parent;
-			private final MindMapNode node;
-			
-			private int childIdx;
-	
-			public InternalDeleteNodeOperation(SimpleMindMapPart parent, MindMapNode node) {
-				super("Delete Node");
-				this.parent = parent;
-				this.node = node;
-			}
-	
-			@Override
-			public boolean isContentRelevant() {
-				// deleting items from the model
-				return true;
-			}
-	
-			@Override
-			public boolean isNoOp() {
-				return false;
-			}
-	
-			@Override
-			public IStatus execute(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-				childIdx = parent.getContentChildrenUnmodifiable().indexOf(node);
-				parent.removeContentChild(node);
-				return Status.OK_STATUS;
-			}
-	
-			@Override
-			public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-				return execute(monitor, info);
-			}
-	
-			@Override
-			public IStatus undo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
-				parent.addContentChild(node, childIdx);
-				return Status.OK_STATUS;
-			}
-			
-		}
-		
-	}
-
-
+<script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/tree/step10_deleting_node/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/operations/DeleteNodeOperation.java"></script>
 	
 The `InternalDeleteNodeOperation` is almost identical to the `DeleteConnectionOperation`.
 

@@ -33,31 +33,33 @@ GEF already provides implementations for hovering and selection feedbacks. We ju
 
 The following code binds 
 
-	@Override
-	protected void bindAbstractContentPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		super.bindAbstractContentPartAdapters(adapterMapBinder);
-	
-		// binding the FXHoverOnHoverPolicy to every part
-		// if a mouse is moving above a part it is set i the HoverModel
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverOnHoverPolicy.class);
-	
-		// add the focus and select policy to every part, listening to clicks
-		// and changing the focus and selection model
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
-	}
+```java
+@Override
+protected void bindAbstractContentPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+	super.bindAbstractContentPartAdapters(adapterMapBinder);
+
+	// binding the FXHoverOnHoverPolicy to every part
+	// if a mouse is moving above a part it is set i the HoverModel
+	adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverOnHoverPolicy.class);
+
+	// add the focus and select policy to every part, listening to clicks
+	// and changing the focus and selection model
+	adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
+}
+```
 
 This bind the policies responsible to every instance of AbstractPath. The policies update the corresponding models.
 
-	
-	@Override
-	protected void bindContentViewerRootPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		super.bindContentViewerRootPartAdapters(adapterMapBinder);
+```java
+@Override
+protected void bindContentViewerRootPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+	super.bindContentViewerRootPartAdapters(adapterMapBinder);
 
-		// binding a Hover Behavior to the root part. it will react to
-		// HoverModel changes and render the hover part
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverBehavior.class);
-	}
-
+	// binding a Hover Behavior to the root part. it will react to
+	// HoverModel changes and render the hover part
+	adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverBehavior.class);
+}
+```
 The `FXHoverBehavior` listens to changes in the `HoverModel` and updates the graphical representation.
 
 With these little changes you are able to select a node. In the next step we will move nodes.
