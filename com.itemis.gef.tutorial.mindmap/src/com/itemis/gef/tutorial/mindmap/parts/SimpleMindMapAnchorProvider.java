@@ -39,7 +39,8 @@ public class SimpleMindMapAnchorProvider extends IAdaptable.Bound.Impl<IVisualPa
 			// create a new anchor instance
 			anchor = new DynamicAnchor(anchorage);
 			
-			// what exactly does that mean?
+			// binding the anchor reference to an object binding, which recalculates the geometry when the layout bounds of
+			// the anchorage are changing
 			anchor.getComputationParameter(AnchorageReferenceGeometry.class).bind(new ObjectBinding<IGeometry>() {
 				{
 					bind(anchorage.layoutBoundsProperty());
