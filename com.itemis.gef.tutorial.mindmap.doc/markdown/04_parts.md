@@ -65,7 +65,7 @@ Here is the code:
 <script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/parts/MindMapConnectionPart.java"></script>
 
 The method `doGetContentAnchorages` tells the framework, with which nodes the connection is connected. Each object gets a role. In our case we have a start anchorage (the source) and an end anchorage (the target of the connection).
-For each anchorage the method `attachToAnchorageVisual` is called. First an anchor provider is retrieved from the part, via `getAdapter`, which eeds to be configured in the module (see below).
+For each anchorage the method `attachToAnchorageVisual` is called. First an anchor provider is retrieved from the part, via `getAdapter`, which needs to be configured in the module (see below).
 After that we set the anchors according to the role.
 
 In `detachFromAnchorageVisual` we remove the anchors, by setting the start and end points to the last positions.  
@@ -78,25 +78,23 @@ Here is the code:
 
 <script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/parts/MindMapPartsFactory.java"></script>
 
-The factory has only one method: `createContentPart`. We are only interested in the `content` right now. Based on the type of the content object, we create a new instance using the injector, which takes care of the dependency injection.
+The factory has only one method: `createContentPart`. We are only interested in the `content` right now. Based on the type of the content object, we create a new instance using the *injector*, which takes care of the dependency injection.
 
 
 ## The AnchorProvider
 
-In the visuals tutorial we created a tiny mindmap by instantiating the visuals and anchors for the connection. This work will be done by the GEF MVC framework now. We already have parts which create the visuals, and also try to create
+In the visuals tutorial we created a tiny mind map by instantiating the visuals and anchors for the connection. This work will be done by the GEF MVC framework now. We already have parts which create the visuals, and also try to create
 the connection anchors. To be able to do that, we need to provide an anchor provider.
 
 Here is the code of the `SimpleMindMapAnchorProvider`:
 
 <script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/parts/SimpleMindMapAnchorProvider.java"></script>
 
-The core is the `get`-method. A factory is bound to an instance of `MindMapNodePart`. The get method retrieves the `Visual` of that part and creates a `DynamicAnchor` like we did in step 3.
-
-TODO: Explain the calculation
+The core is the `get`-method. A factory is bound to an instance of `MindMapNodePart`. The get method retrieves the `Visual` of that part and creates a `DynamicAnchor` like we did in step 3. After the creation, we are binding the computation parameter of the dynamic anchor to an anonymous instance of `ObjectBinding`. This binding itself is bound to the layoutBounds of the anchorage, in our case the MindMapNodeVisual. If those are changing, a recalculation i triggered a recalculation of the anchor. 
 
 ## The Module
 
-GEF uses guice to manage the dependency injection. With guice you specify teh dependencies in a separate file, called a `Module`.
+GEF uses *Guice* to manage the dependency injection. With *Guice* you specify the dependencies in a separate file, called a `Module`.
 GEF provides default module, which we can use as superclass and modify via overriding methods or add new one.
 
 The GEF module use a name pattern to identify, to what class we are binding right now.
@@ -108,27 +106,27 @@ Right now our module is small, but will grow in size as we go on with the tutori
 	
 ## The Application
 
-Now it's time to see, what our mind amp looks like. We will creating a new Application implementation, called `SimpleMindMapApplication` in the mindmap project.
+Now it's time to see, what our mind amp looks like. We will creating a new Application implementation, called `SimpleMindMapApplication` in the mind map project.
 
 Here is the code:
 
 <script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step4_parts/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/SimpleMindMapApplication.java"></script>
 
-Before we create our scene in `start`we instantiate our Module and create an instance of `FXDomain`. using Guice. Thanks to the default implementation of the `MvcFxModule`.
+Before we create our scene in `start`we instantiate our Module and create an instance of `FXDomain`. using *Guice*. Thanks to the default implementation of the `MvcFxModule`.
 The method `getContentViewer` shows, how the dependencies are retrieved, with a role. This time, we want a bound FXViewer with the role `FXDomain.CONTENT_VIEWER_ROLE`.
 
 After the creation of the domain, we call `hookViewers`. This method gets the JavaFX canvas and adds it to a scene, which will be set on the stage. later we will extend this method to surround our canvas with buttons
 to create new nodes or connection, or provide undo/redo buttons.
 
 After some more stage configuration, we have to activate our domain and then we can create our test model using the `SimpleMindMapExampleFactory`. After that retrieve the `ContentModel` from the viewer. Again this dependency was set
-by the `MvcFxModule`. As the name already gives a way, the content model contains the model of the viewer. We add our mindmap to the model, and GEF will automatically create the parts and visuals and render them.
+by the `MvcFxModule`. As the name already gives a way, the content model contains the model of the viewer. We add our mind map to the model, and GEF will automatically create the parts and visuals and render them.
 
 That's it. We have a GEF MVC Application.
 
 
 ## The final result
 
-When you start the application (again, Mac Users, don't forget to uncheck *-XstartOnFirstThread argument when launching with SWT* in the  *Arguments* tab) youre window should look like the following screenshot.
+When you start the application (again, Mac Users, don't forget to uncheck *-XstartOnFirstThread argument when launching with SWT* in the  *Arguments* tab) your window should look like the following screenshot.
 
 ![Rendered Parts](images/step4_result.png "Screenshot of Simple Mind Map")
 
