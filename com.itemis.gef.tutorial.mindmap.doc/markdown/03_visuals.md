@@ -10,7 +10,7 @@ After the creation, open the `MANIFEST.MF` and go to the *dependencies* tab.
 
 Again, we import the package: `com.google.common.collect`
 
-In addition, we have some plugin dependencies. Add the following plugins to the list *Required Plug-ins*:
+In addition, we have some plug-in dependencies. Add the following plug-ins to the list *Required Plug-ins*:
 
  * org.eclipse.gef.geometry
  * org.eclipse.gef.fx
