@@ -23,7 +23,7 @@ We need to create a new plug-in project, named `com.itemis.gef.tutorial.mindmap.
  
 Fill out the second page of the editor as the following screenshot shows:
 
-![Create UI Project ](images/create_eclipse_plugin.png "The content of the eclipse ui project in the New Project... wizard")
+![Create UI Project ](images/create_eclipse_plug-in.png "The content of the eclipse ui project in the New Project... wizard")
 
 We need to generate an `Activator` which initializes the eclipse plug-in. 
 
