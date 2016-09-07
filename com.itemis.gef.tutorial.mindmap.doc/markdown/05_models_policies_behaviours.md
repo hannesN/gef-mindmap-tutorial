@@ -20,11 +20,11 @@ Models, be it  the SimpleMindMap model or the models above are modified via poli
 
 ### Policies
 
-A policy is a transactional change of the model. It uses operations to implement the changes and there for are able to be undone.
+Policies are changes in the model, which are wrapped in an undoable operation. Policies are passive, meaning they are triggered bei tool in the interaction process, e.g. a mouse click.
 
 ### Behaviors
 
-Behaviors are instant changes in the model. These are mostly visual feedbacks, like the rendering of the outline on hover or selection.
+Behaviors change the model directly, without any transaction. They are actively listing for relevant changes and act accordingly.
 
 
 ## Add a hover and selection behavior to the Simple Mind Map Editor
