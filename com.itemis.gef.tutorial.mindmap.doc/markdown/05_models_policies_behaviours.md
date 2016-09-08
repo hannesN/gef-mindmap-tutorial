@@ -1,4 +1,4 @@
-# Step 5 - Models, Policies and Behaviours
+# Step 5 - Models, Policies and Behaviors
 
 
 ## Models
@@ -20,7 +20,7 @@ Models, be it  the SimpleMindMap model or the models above are modified via poli
 
 ### Policies
 
-Policies are changes in the model, which are wrapped in an undoable operation. Policies are passive, meaning they are triggered bei tool in the interaction process, e.g. a mouse click.
+Policies are changes in the model, which are wrapped in an undoable operation. Policies are passive, meaning they are triggered by tools in the interaction process, e.g. a mouse click.
 
 ### Behaviors
 
@@ -29,9 +29,7 @@ Behaviors change the model directly, without any transaction. They are actively 
 
 ## Add a hover and selection behavior to the Simple Mind Map Editor
 
-GEF already provides implementations for hovering and selection feedbacks. We just need to add them to our module.
-
-The following code binds 
+GEF already provides implementations for hovering and selection feedbacks. We just need to add them to our module:
 
 ```java
 @Override

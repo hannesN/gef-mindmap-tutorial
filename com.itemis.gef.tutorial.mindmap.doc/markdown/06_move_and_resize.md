@@ -60,7 +60,8 @@ public class SimpleMindMapResizePolicy extends FXResizePolicy {
 }
 ```
 
-The MindMapNodeVisual itself is not resizable, the shape (the rounded rectangle) is, so we return this, instead of the visual.
+The `MindMapNodeVisual` itself is not resizable, the shape (the rounded rectangle) is, so we return this, instead of the visual.
+
 In addition to the ResizePolicy, we need a way, to tell GEF to create the handles, we want to drag, to resize the node.
 This is done via a `FXDefaultSelectionHandlePartFactory`which is already bound in the `MvcFXModul`. But this factory needs a
 geometry provider, to position the handles. We use a `ShapeBoundsProvider` and bind it in addition to the  `MindMapResizePolicy`.
