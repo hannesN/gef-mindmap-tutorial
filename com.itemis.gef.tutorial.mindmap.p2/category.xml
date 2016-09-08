@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site>
+   <feature url="features/com.itemis.gef.tutorial.mindmap.feature_1.0.0.qualifier.jar" id="com.itemis.gef.tutorial.mindmap.feature" version="1.0.0.qualifier">
+      <category name="com.itemis.gef.tutorial.mindmap"/>
+   </feature>
+   <category-def name="com.itemis.gef.tutorial.mindmap" label="Simple Mind Map Editor"/>
+</site>

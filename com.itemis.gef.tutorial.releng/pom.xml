@@ -14,6 +14,7 @@
 		<module>../com.itemis.gef.tutorial.mindmap</module>
 		<module>../com.itemis.gef.tutorial.mindmap.ui</module>
 		<module>../com.itemis.gef.tutorial.mindmap.feature</module>
+		<module>../com.itemis.gef.tutorial.mindmap.p2</module>
 	</modules>
 
 	<properties>
