@@ -1,0 +1,54 @@
+digraph G {
+        fontname = "Bitstream Vera Sans"
+        fontsize = 8
+
+        node [
+                fontname = "Bitstream Vera Sans"
+                fontsize = 8
+                shape = "record"
+               	
+        ]
+
+        edge [
+                fontname = "Bitstream Vera Sans"
+                fontsize = 8
+        ]
+        
+		subgraph mindmapModelPackage {
+			label = "Package com.itemis.gef.tutorial.model"
+		
+			AbstractMindMapItem [
+				label = "{AbstractMindMap|-pcs:PropertyChangeSupport|+addPropertyChangeListener(listener : PropertyChangeListener)\l+removePropertyChangeListener(listener : PropertyChangeListener)}"
+			]
+		
+			SimpleMindMap [
+				label = "{SimpleMindMap|-childElements : AbstractMindMapItem|}"
+			]
+		
+			MindMapNode [
+				label = "{MindMapNode|-title : String\l-description : String\l-color : javafx.scene.paint.Color\l-bounds :  org.eclipse.gef.geometry.planar.Rectangle|}"
+			]
+		
+			MindMapConnection [
+				label = "{MindMapConnection|-source : MindMapNode\l-target : MindMapNode|}"
+			]
+		}
+		
+		edge [
+			arrowhead = "onormal"
+		]
+		
+		SimpleMindMap -> AbstractMindMapItem
+		
+		MindMapNode -> AbstractMindMapItem
+		
+		MindMapConnection -> AbstractMindMapItem
+		
+		edge [
+			arrowhead = "diamond"
+			
+			headlabel = "childElements"
+			taillabel = "0..*"
+		]
+		AbstractMindMapItem -> SimpleMindMap
+}
