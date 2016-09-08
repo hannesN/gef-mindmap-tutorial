@@ -2,7 +2,7 @@
 
 Creating connection is similar to creating a new node, but not quite the same. The main difference is, while we could create new nodes by just one click, we need at least two clicks for the connection: one on the source node and one on the target.
 
-This means we need an IFXOnClickPolicy which stores the target of the click on the first click and creates the connection on the second click. But instead of adding a source attribute to the future `CreateConnectionOnClickPolicy` we will store the first selection in the `ItemCreationModel`.
+This means we need an `IFXOnClickPolicy`  which stores the target of the click on the first click and creates the connection on the second click. But instead of adding a source attribute to the future `CreateConnectionOnClickPolicy` we will store the first selection in the `ItemCreationModel`.
 
 ## Extending the ItemCreationModel
 
@@ -24,7 +24,7 @@ Here is the whole code:
 
 We also need a policy, which instantiates and executes the operation. This policy will be bound to the `MindMapNodePart` in the module.
 
-here is the code:
+Here is the code:
 
 <script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step9_create_connections/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/policies/CreateNewNodeOnClickPolicy.java"></script>
 
@@ -94,6 +94,6 @@ private Node createToolPalette() {
 }
 ```
 	
-Note that I added some height settings, so the second button looks not completely lost.
+I added some height settings, so the second button looks not completely lost.
 
 That's it. Try it. You can now create connections. 

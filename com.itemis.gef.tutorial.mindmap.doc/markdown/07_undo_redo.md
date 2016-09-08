@@ -1,6 +1,8 @@
 # Step 7 - Undo/Redo operations
 
-In this tutorial we are adding two buttons two our window, which execute undo and redo operations.
+Before we step into creating new nodes and connection, we will
+take a detour and add two buttons to our window, which trigger used to
+undo and redo operations
 
 ## Extending the scene
 

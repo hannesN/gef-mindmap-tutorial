@@ -2,7 +2,7 @@
 
 We are able to move and to resize nodes now. What about creating new ones?
 
-In this tutorial, we will add another button bar at the right side of the window and fill it with ToggleButtons. These is our tooling palette.
+In this step, we will add another button bar at the right side of the window and fill it with ToggleButtons. These is our tooling palette.
 
 In this tutorial we will add a new kind of model to content viewer of our domain: a `ItemCreationModel`. This is the model to manage the creation states.
 
