@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project>
+	<modelVersion>4.0.0</modelVersion>
+
+	<parent>
+		<groupId>com.itemis.gef.tutorial.mindmap</groupId>
+		<artifactId>parent</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+		<relativePath>../com.itemis.gef.tutorial.releng</relativePath>
+	</parent>
+
+	<artifactId>com.itemis.gef.tutorial.mindmap.application</artifactId>
+	<packaging>eclipse-repository</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-p2-director-plugin</artifactId>
+				<version>${tycho.version}</version>
+				<executions>
+					<execution>
+						<id>create-product-distributions</id>
+						<goals>
+							<goal>materialize-products</goal>
+							<goal>archive-products</goal>
+						</goals>
+					</execution>
+				</executions>
+				<configuration>
+					<products>
+						<product>
+							<!-- select product with ID product.id; the archives get the classifiers 
+								"<os>.<ws>.<arch>" -->
+							<id>com.itemis.gef.tutorial.mindmap.application</id>
+							<rootFolder></rootFolder>
+							<rootFolders>
+								<macosx></macosx>
+								<linux></linux>
+								<win32></win32>
+							</rootFolders>
+						</product>
+					</products>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+</project>

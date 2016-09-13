@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="gef-integration" sequenceNumber="14">
+<?pde version="3.8"?><target name="gef-integration" sequenceNumber="22">
 <locations>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="org.eclipse.gef.mvc.compatibility.equinox.feature.group" version="5.0.0.201609091404"/>
 <unit id="org.eclipse.gef.fx.sdk.feature.group" version="5.0.0.201609091404"/>
 <unit id="org.eclipse.gef.cloudio.sdk.feature.group" version="5.0.0.201609091404"/>
@@ -17,12 +17,34 @@
 <unit id="org.eclipse.gef.geometry.sdk.feature.group" version="5.0.0.201609091404"/>
 <repository location="http://download.eclipse.org/tools/gef/updates/integration"/>
 </location>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="planner" includeSource="true" type="InstallableUnit">
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.google.inject.assistedinject" version="3.0.0.v201402270930"/>
+<unit id="com.google.inject.multibindings.source" version="3.0.0.v201605172100"/>
+<unit id="com.google.inject.assistedinject.source" version="3.0.0.v201402270930"/>
+<unit id="com.google.guava" version="15.0.0.v201403281430"/>
+<unit id="com.google.inject" version="3.0.0.v201605172100"/>
+<unit id="com.google.inject.multibindings" version="3.0.0.v201605172100"/>
+<unit id="com.google.guava.source" version="15.0.0.v201403281430"/>
+<unit id="com.google.inject.source" version="3.0.0.v201605172100"/>
+<repository location="http://download.eclipse.org/tools/orbit/downloads/drops/R20160520211859/repository/"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.equinox.sdk.feature.group" version="3.12.0.v20160606-1311"/>
+<unit id="org.eclipse.fx.ide.feature.feature.group" version="2.4.0.201605112122"/>
 <unit id="org.eclipse.emf.sdk.feature.group" version="2.12.0.v20160526-0356"/>
+<unit id="org.eclipse.pde.api.tools.ee.feature.feature.group" version="1.0.1.v20160419-1303"/>
 <unit id="org.eclipse.xtext.sdk.feature.group" version="2.10.0.v201605250459"/>
+<unit id="org.eclipse.equinox.core.sdk.feature.group" version="3.12.0.v20160603-1336"/>
 <unit id="org.eclipse.equinox.executable.feature.group" version="3.6.300.v20160525-1303"/>
+<unit id="org.eclipse.fx.runtime.min.feature.feature.group" version="2.4.0.201605100504"/>
+<unit id="org.eclipse.equinox.p2.sdk.feature.group" version="3.9.200.v20160606-1311"/>
+<unit id="org.eclipse.rcp.feature.group" version="4.6.0.v20160606-1342"/>
 <unit id="org.eclipse.sdk.ide" version="4.6.0.I20160606-1100"/>
 <repository location="http://download.eclipse.org/releases/neon"/>
+</location>
+<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="org.eclipse.swt.dummyfragments.feature.group" version="1.0.0.v20160603-0902"/>
+<repository location="https://eclipseguru.github.io/missing-swt-fragments/"/>
 </location>
 </locations>
 </target>

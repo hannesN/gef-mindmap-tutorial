@@ -10,6 +10,6 @@
   </parent>
 
   <artifactId>com.itemis.gef.tutorial.mindmap.rcp</artifactId>
-  <packaging>eclipse-repository</packaging>
+  <packaging>eclipse-plugin</packaging>
 
 </project>

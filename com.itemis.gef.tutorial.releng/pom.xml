@@ -16,12 +16,20 @@
 		<module>../com.itemis.gef.tutorial.mindmap.feature</module>
 		<module>../com.itemis.gef.tutorial.mindmap.ui.e4</module>
 		<module>../com.itemis.gef.tutorial.mindmap.rcp</module>
+		<module>../com.itemis.gef.tutorial.mindmap.application</module>
 		<module>../com.itemis.gef.tutorial.mindmap.p2</module>
 	</modules>
 
 	<properties>
-		<tycho.version>0.25.0</tycho.version>
+		<tycho.version>0.26.0</tycho.version>
 	</properties>
+
+	<pluginRepositories>
+		<pluginRepository>
+			<id>tycho-snapshots</id>
+			<url>https://repo.eclipse.org/content/repositories/tycho-snapshots/</url>
+		</pluginRepository>
+	</pluginRepositories>
 
 	<build>
 		<plugins>
@@ -33,7 +41,7 @@
 					<encoding>UTF-8</encoding>
 					<source>1.8</source>
 					<target>1.8</target>
-					<!--  Necessary to find the compatibility class (FCCanvas) used in GEF -->
+					<!-- Necessary to find the compatibility class (FCCanvas) used in GEF -->
 					<extraClasspathElements>
 						<extraClasspathElement>
 							<groupId>com.oracle</groupId>

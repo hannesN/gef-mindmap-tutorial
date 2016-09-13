@@ -12,10 +12,6 @@
                name="lifeCycleURI"
                value="bundleclass://com.itemis.gef.tutorial.mindmap.rcp/com.itemis.gef.tutorial.mindmap.rcp.E4LifeCycle">
          </property>
-         <property
-               name="applicationCSS"
-               value="platform:/plugin/com.itemis.gef.tutorial.mindmap.rcp/css/default.css">
-         </property>
          <property name="applicationXMI" value="com.itemis.gef.tutorial.mindmap.rcp/Application.e4xmi"> </property>
          
          <property
