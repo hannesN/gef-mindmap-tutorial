@@ -126,8 +126,6 @@ public class SimpleMindMapEditor extends AbstractFXEditor {
 		pane.setCenter(contentViewer.getCanvas());
 		pane.setRight(createToolPalette());
 
-		pane.setMinWidth(800);
-		pane.setMinHeight(600);
 
 		Scene scene = new Scene(pane);
 		getCanvas().setScene(scene);

@@ -26,3 +26,4 @@ Import-Package: com.google.common.reflect;version="1.3.0",
  com.google.inject;version="1.3.0",
  com.google.inject.util;version="1.3.0",
  javafx.embed.swt;version="2.2.0"
+Export-Package: com.itemis.gef.tutorial.mindmap.ui.editor

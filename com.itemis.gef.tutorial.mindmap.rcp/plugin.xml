@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         id="product"
+         point="org.eclipse.core.runtime.products">
+      <product
+            name="com.itemis.gef.tutorial.mindmap.rcp"
+            application="org.eclipse.e4.ui.workbench.swt.E4Application">
+         <property
+               name="lifeCycleURI"
+               value="bundleclass://com.itemis.gef.tutorial.mindmap.rcp/com.itemis.gef.tutorial.mindmap.rcp.E4LifeCycle">
+         </property>
+         <property
+               name="applicationCSS"
+               value="platform:/plugin/com.itemis.gef.tutorial.mindmap.rcp/css/default.css">
+         </property>
+         <property name="applicationXMI" value="com.itemis.gef.tutorial.mindmap.rcp/Application.e4xmi"> </property>
+         
+         <property
+               name="appName"
+               value="com.itemis.gef.tutorial.mindmap.rcp">
+         </property>
+      </product>
+   </extension>
+   <extension
+         id="com.itemis.gef.tutorial.mindmap.rcp.application"
+         point="org.eclipse.core.runtime.applications">
+      <application
+            cardinality="singleton-global"
+            thread="main"
+            visible="true">
+      </application>
+   </extension>
+
+</plugin>

@@ -14,6 +14,8 @@
 		<module>../com.itemis.gef.tutorial.mindmap</module>
 		<module>../com.itemis.gef.tutorial.mindmap.ui</module>
 		<module>../com.itemis.gef.tutorial.mindmap.feature</module>
+		<module>../com.itemis.gef.tutorial.mindmap.ui.e4</module>
+		<module>../com.itemis.gef.tutorial.mindmap.rcp</module>
 		<module>../com.itemis.gef.tutorial.mindmap.p2</module>
 	</modules>
 
@@ -31,7 +33,7 @@
 					<encoding>UTF-8</encoding>
 					<source>1.8</source>
 					<target>1.8</target>
-					<!--  Necessary to find the compaibility class (FCCanvas) used in GEF -->
+					<!--  Necessary to find the compatibility class (FCCanvas) used in GEF -->
 					<extraClasspathElements>
 						<extraClasspathElement>
 							<groupId>com.oracle</groupId>

@@ -30,7 +30,6 @@ public class MindMapPartsFactory implements IContentPartFactory<Node> {
 	public IContentPart<Node, ? extends Node> createContentPart(Object content, IBehavior<Node> contextBehavior,
 			Map<Object, Object> contextMap) {
 
-		
 		if (content==null)
 			throw new IllegalArgumentException("Content must not be null!");
 		
