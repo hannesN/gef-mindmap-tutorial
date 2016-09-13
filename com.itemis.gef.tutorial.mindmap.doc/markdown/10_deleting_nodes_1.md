@@ -1,6 +1,6 @@
 # Step 10 - Deleting Nodes 1
 
-In this Tutorial we will create a context menu with an entry to delete a node. In addition we will create an operation to remove the node.
+In this step we will create a context menu with an entry to delete a node. In addition we will create an operation to remove the node.
 
 ## The Context Menu
 
@@ -56,6 +56,6 @@ Here is the code:
 The `InternalDeleteNodeOperation` is almost identical to the `DeleteConnectionOperation`.
 
 Start the application, you should be able to delete a node now.
-In a future tutorial we will add a handle to the selection feedback, to delete the node on click.
+
 
 

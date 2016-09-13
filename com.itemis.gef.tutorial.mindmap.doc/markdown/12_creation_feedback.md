@@ -42,7 +42,7 @@ A Behavior is a direct reaction to changes in a model, without triggering a oper
 
 We create a class called `CreateFeedbackBehavior`.
 
-First, here is the code:
+Here is the code:
 
 <script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/step12_creation_feedback/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/behaviors/CreateFeedbackBehavior.java"></script>
 	
