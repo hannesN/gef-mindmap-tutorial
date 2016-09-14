@@ -23,7 +23,6 @@ import org.eclipse.gef.graph.Node;
 import org.eclipse.gef.layout.LayoutContext;
 import org.eclipse.gef.layout.LayoutProperties;
 import org.eclipse.gef.layout.algorithms.RadialLayoutAlgorithm;
-import org.eclipse.gef.layout.algorithms.TreeLayoutAlgorithm;
 import org.eclipse.gef.mvc.operations.ITransactionalOperation;
 import org.eclipse.gef.mvc.parts.IVisualPart;
 
@@ -36,7 +35,7 @@ import com.itemis.gef.tutorial.mindmap.visuals.MindMapNodeVisual;
 import javafx.geometry.Bounds;
 
 /**
- * Operation to layout the mind map automatically, using the {@link TreeLayoutAlgorithm}.
+ * Operation to layout the mind map automatically, using the {@link RadialLayoutAlgorithm}.
  * 
  * 
  * @author hniederhausen
