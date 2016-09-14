@@ -6,12 +6,15 @@ import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.mvc.fx.domain.FXDomain;
 import org.eclipse.gef.mvc.fx.viewer.FXViewer;
 import org.eclipse.gef.mvc.models.ContentModel;
+import org.eclipse.gef.mvc.operations.ITransactionalOperation;
 
 import com.google.inject.Guice;
 import com.itemis.gef.tutorial.mindmap.model.SimpleMindMap;
 import com.itemis.gef.tutorial.mindmap.model.SimpleMindMapExampleFactory;
 import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel.Type;
+import com.itemis.gef.tutorial.mindmap.operations.LayoutNodesOperation;
+import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapPart;
 import com.itemis.gef.tutorial.mindmap.visuals.MindMapNodeVisual;
 
 import javafx.application.Application;
@@ -70,7 +73,7 @@ public class SimpleMindMapApplication extends Application {
 	private void populateViewerContents() {
 		SimpleMindMapExampleFactory fac = new SimpleMindMapExampleFactory();
 
-		SimpleMindMap mindMap = fac.createSingleNodeExample();
+		SimpleMindMap mindMap = fac.createComplexExample();
 
 		FXViewer viewer = getContentViewer();
 
@@ -195,7 +198,24 @@ public class SimpleMindMapApplication extends Application {
 			redoButton.setDisable(!e.getHistory().canRedo(ctx));
 		});
 
-		return new HBox(10, undoButton, redoButton);
+		
+		Button layoutButton = new Button("Layout");
+		layoutButton.setOnAction((e) -> {
+			startLayoutoperation();
+		});
+		
+		return new HBox(10, undoButton, redoButton, layoutButton);
+	}
+	
+	private void startLayoutoperation() {
+		try {
+			SimpleMindMapPart part = (SimpleMindMapPart) getContentViewer().getRootPart().getContentPartChildren().get(0);
+			ITransactionalOperation op = new LayoutNodesOperation(part);
+			
+			domain.execute(op, null);
+		} catch (ExecutionException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public static void main(String[] args) {

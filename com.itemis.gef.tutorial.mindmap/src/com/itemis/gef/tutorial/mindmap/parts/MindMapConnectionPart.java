@@ -27,8 +27,8 @@ import javafx.scene.Node;
  */
 public class MindMapConnectionPart extends AbstractFXContentPart<Connection> {
 		
-		private static final String START_ROLE = "START";
-		private static final String END_ROLE = "END";
+		public static final String START_ROLE = "START";
+		public static final String END_ROLE = "END";
 		
 		@Override
 		public MindMapConnection getContent() {

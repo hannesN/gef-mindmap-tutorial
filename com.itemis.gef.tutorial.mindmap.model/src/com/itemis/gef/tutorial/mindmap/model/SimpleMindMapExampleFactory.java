@@ -17,7 +17,6 @@ public class SimpleMindMapExampleFactory {
 		
 		mindMap.addChildElement(center);
 		
-		mindMap.addChildElement(createComplexExample());
 		
 		return mindMap;
 	}
