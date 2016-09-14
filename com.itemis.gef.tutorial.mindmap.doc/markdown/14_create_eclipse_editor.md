@@ -1,6 +1,6 @@
 # Step 14 - Create an Eclipse Editor
 
-In this Tutorial we want to integrate the GEF-Editor into the Eclipse IDE. basic knowledge about how to develop Eclipse Plug-ins are presumed.
+In this step we want to integrate the GEF-Editor into the Eclipse IDE. Basic knowledge about developing Eclipse Plug-ins are presumed.
 
 ## Modifying the existing projects
 
@@ -31,7 +31,7 @@ After the creation, we need to add the dependencies to our project. The easiest 
 
 <script src="http://gist-it.appspot.com/http://github.com/hannesN/gef-mindmap-tutorial/blob/master/com.itemis.gef.tutorial.mindmap.ui/META-INF/MANIFEST.MF"></script>
 
-Of course, we'll need the other mindmap projects, as well as some GEF plug-ins. The imported packages starting with `com.google` are *Google Guice* packages which we also imported in the other mind map manifests. 
+Of course, we'll need the other mind map projects, as well as some GEF plug-ins. The imported packages starting with `com.google` are *Google Guice* packages which we also imported in the other mind map manifests. 
  
 The other dependencies provide the API to open an editor and load/save its content.
  
