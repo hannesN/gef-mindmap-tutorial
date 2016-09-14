@@ -128,7 +128,6 @@ public class LayoutNodesOperation extends AbstractOperation implements ITransact
 		
 		MindMapNodeVisual visual = mmNode.getVisual();
 		Bounds lb = visual.getLayoutBounds();
-		System.out.println(lb);
 		
 		// creating the node and setting the attributes for the layout algorithm
 		Node node = new Node.Builder().buildNode();
@@ -150,12 +149,10 @@ public class LayoutNodesOperation extends AbstractOperation implements ITransact
 	@Override
 	public IStatus redo(IProgressMonitor monitor, IAdaptable info) throws ExecutionException {
 		for (Map.Entry<MindMapNodePart, Point> e : deltaMap.entrySet()) {
-			System.out.println("Old Pos: " + e.getKey().getContent().getBounds().getLocation());
 			AffineTransform transform = new AffineTransform();
 			transform.translate(e.getValue().x(), e.getValue().y());
 			e.getKey().transformContent(transform);
 			e.getKey().refreshVisual();
-			System.out.println("New Pos: " + e.getKey().getContent().getBounds().getLocation());
 		}
 		
 		return Status.OK_STATUS;
