@@ -6,7 +6,7 @@ In this step we will add another button on our button bar, which triggers an aut
 
 We will implement the operation in the project *com.itemis.gef.tutorial.mindmap*
 
-First we need to add the following dependencies tp the *MANIFEST.MF*:
+First we need to add the following dependencies to the *MANIFEST.MF*:
 
 * `org.eclipse.gef.layout` and
 * `org.eclipse.gef.graph`.
@@ -67,5 +67,4 @@ layoutButton.setOnAction((e) -> {
 return new HBox(10, undoButton, redoButton, layoutButton);
 ```
 
-That's it, we now have an automatic layouter.
 	
