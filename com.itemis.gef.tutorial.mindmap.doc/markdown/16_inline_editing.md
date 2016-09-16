@@ -152,11 +152,12 @@ public void endEditing(String propertyName) {
 	children.add(idx, elementToAdd);
 }
 ```
+
 If `endEditing`is called, the read-only visual is set at its old position and the edit control is removed.
 
 That's the adjustment of the visual. Let's start with the part.
 
-## Declaring the interface
+## Declaring the Interface
 
 Remember, the part is the controller in GEFs MVC pattern. Therefore the controller manages the starting, canceling and submitting the inline editing. 
 
@@ -166,7 +167,7 @@ The following interface defines the methods, we will need from a part to provide
 
 The interface s straight forward, the comments on the method definitions should suffice to understand, what implementations should do. So let's go to the `MindMapNodePart` implementing the interface. 
 
-## Implementing the interface
+## Implementing the Interface
 
 First we have to add the IInlineEditablePart interface to the implements statement of the class.
 
@@ -234,7 +235,7 @@ Every change in the model is executed via an operation. The inline editing of th
 
 <script src="http://gist-it.appspot.com/https://github.com/hannesN/gef-mindmap-tutorial/blob/step16_inline_editing/com.itemis.gef.tutorial.mindmap/src/com/itemis/gef/tutorial/mindmap/operations/SubmitInlineEditOperation.java"></script>
 	
-As you can see. This operation is delegating to the `IInlineEditablePart`s `submitEditingValue`
+As you can see. This operation is delegating to `submitEditingValue` of `IInlineEditablePart`.
 
 ## Create a Policy
 
@@ -242,7 +243,7 @@ We will create a policy which react on a mouse click on a `MindMapNodePart`. The
 
 After the editor node is created, the policy add some listeners, to check when to cancel or submit the changes.
 
-### Implement the policy
+### Implement the Policy
 
 So let's see how it is done in detail. First have a look at the code:
 
@@ -256,7 +257,7 @@ The first listener we add listens to key releases. We cancel the editing, if <ES
 
 The second listener listens to focus changes. If the editor is loosing the focus we want to close it. Sadly clicking inside a text field also changes the focus property shortly from true to false. That's why we start a new thread, wait for 200 milliseconds and check the field again, before we end the editing. `Platform.runLater` assures, that we call `endEditing` in the UI-thread. 
 
-### Bind the policy
+### Bind the Policy
 
 The final step is, to bind the `InlineEditOnClickPolicy` to the `MindMapNodePart`.
 
