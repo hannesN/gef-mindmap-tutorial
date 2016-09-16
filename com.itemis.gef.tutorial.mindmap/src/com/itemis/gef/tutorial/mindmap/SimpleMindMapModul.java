@@ -24,6 +24,7 @@ import org.eclipse.gef.mvc.parts.IContentPartFactory;
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
 import com.itemis.gef.tutorial.mindmap.behaviors.CreateFeedbackBehavior;
+import com.itemis.gef.tutorial.mindmap.models.InlineEditModel;
 import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapNodePart;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapPartsFactory;
@@ -34,6 +35,7 @@ import com.itemis.gef.tutorial.mindmap.parts.handles.MindMapNodeHoverHandlesFact
 import com.itemis.gef.tutorial.mindmap.parts.handles.MindMapNodeSelectionHandlesFactory;
 import com.itemis.gef.tutorial.mindmap.policies.CreateNewConnectiononClickPolicy;
 import com.itemis.gef.tutorial.mindmap.policies.CreateNewNodeOnClickPolicy;
+import com.itemis.gef.tutorial.mindmap.policies.InlineEditOnClickPolicy;
 import com.itemis.gef.tutorial.mindmap.policies.ShowMindMapNodeContextMenuOnClickPolicy;
 import com.itemis.gef.tutorial.mindmap.policies.SimpleMindMapResizePolicy;
 import com.itemis.gef.tutorial.mindmap.policies.handles.DeleteNodeHandleOnClickPolicy;
@@ -56,6 +58,9 @@ public class SimpleMindMapModul extends MvcFxModule {
 
 		// scoping the creation model
 		bindItemCreationModel();
+		
+		// scoping the inline edit model
+		bindInlineEditModel();
 
 		bindMindMapNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), MindMapNodePart.class));
 
@@ -104,6 +109,8 @@ public class SimpleMindMapModul extends MvcFxModule {
 		// bind the context menu policy to the part
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShowMindMapNodeContextMenuOnClickPolicy.class);
 
+		// adding the inline edit policy to the part to listen to double clicks  on "fields"
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(InlineEditOnClickPolicy.class);
 	}
 
 	@Override
@@ -150,6 +157,9 @@ public class SimpleMindMapModul extends MvcFxModule {
 		// bind the model to the content viewer
 		bindItemCreationModelAsContentViewerAdapter(adapterMapBinder);
 
+		// bind the model to the content viewer
+		bindIInlineEditModelAsContentViewerAdapter(adapterMapBinder);
+		
 		// binding the creation feedback part factory using the role, we are
 		// using in the behavior
 		AdapterKey<?> role = AdapterKey.role(CreateFeedbackBehavior.CREATE_FEEDBACK_PART_FACTORY);
@@ -187,11 +197,6 @@ public class SimpleMindMapModul extends MvcFxModule {
 				.to(FXResizeTranslateFirstAnchorageOnHandleDragPolicy.class);
 	}
 
-	/**
-	 * Binds the
-	 * 
-	 * @param adapterMapBinder
-	 */
 	protected void bindItemCreationModelAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		AdapterKey<ItemCreationModel> key = AdapterKey.get(ItemCreationModel.class);
 		adapterMapBinder.addBinding(key).to(ItemCreationModel.class);
@@ -202,5 +207,17 @@ public class SimpleMindMapModul extends MvcFxModule {
 	 */
 	protected void bindItemCreationModel() {
 		binder().bind(ItemCreationModel.class).in(AdaptableScopes.typed(FXViewer.class));
+	}
+	
+	protected void bindIInlineEditModelAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		AdapterKey<InlineEditModel> key = AdapterKey.get(InlineEditModel.class);
+		adapterMapBinder.addBinding(key).to(InlineEditModel.class);
+	}
+
+	/**
+	 * Scoping the InlineEditModel in the FXViewer class
+	 */
+	protected void bindInlineEditModel() {
+		binder().bind(InlineEditModel.class).in(AdaptableScopes.typed(FXViewer.class));
 	}
 }

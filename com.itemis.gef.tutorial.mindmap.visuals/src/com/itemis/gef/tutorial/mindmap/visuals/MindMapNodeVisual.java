@@ -5,10 +5,14 @@ import org.eclipse.gef.geometry.planar.RoundedRectangle;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Group;
 import javafx.scene.Node;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextInputControl;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
@@ -90,5 +94,48 @@ public class MindMapNodeVisual extends Group {
 
 	public Text getDescriptionText() {
 		return descriptionText;
+	}
+	
+	//*** Direct Editing Code */
+	
+	public Node startEditing(String propertyName) {
+		TextInputControl inputControl = null;
+		int idx = 0;
+		double width = shape.getBoundsInLocal().getWidth();
+		double height = titleText.getBoundsInLocal().getHeight();
+		if (propertyName.equals("title")) {
+			inputControl = new TextField(titleText.getText());
+		} else if (propertyName.equals("description")) {
+			inputControl = new TextArea(descriptionText.getText());
+			idx = 1;
+			height = shape.getBoundsInLocal().getHeight();
+		} else {
+			throw new IllegalArgumentException("Invalid entry");
+		}
+		
+		inputControl.setPrefSize(width, height);
+
+		ObservableList<Node> children = labelGroup.getChildren();
+		children.remove(idx);
+		children.add(idx, inputControl);
+
+		return inputControl;
+	}
+
+	public void endEditing(String propertyName) {
+		int idx = 0;
+		Node elementToAdd = null;
+		if (propertyName.equals("title")) {
+			elementToAdd = titleText;
+		} else if (propertyName.equals("description")) {
+			elementToAdd = descriptionFlow;
+			idx=1;
+		} else {
+			throw new IllegalArgumentException("Invalid entry");
+		}
+
+		ObservableList<Node> children = labelGroup.getChildren();
+		children.remove(idx);
+		children.add(idx, elementToAdd);
 	}
 }

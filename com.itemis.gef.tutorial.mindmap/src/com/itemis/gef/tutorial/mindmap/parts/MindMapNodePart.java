@@ -12,21 +12,27 @@ import org.eclipse.gef.mvc.parts.IResizableContentPart;
 import org.eclipse.gef.mvc.parts.ITransformableContentPart;
 
 import com.google.common.collect.HashMultimap;
+import com.google.common.collect.Lists;
 import com.google.common.collect.SetMultimap;
 import com.itemis.gef.tutorial.mindmap.model.MindMapNode;
+import com.itemis.gef.tutorial.mindmap.models.IInlineEditableField;
+import com.itemis.gef.tutorial.mindmap.models.InlineEditableTextField;
 import com.itemis.gef.tutorial.mindmap.visuals.MindMapNodeVisual;
 
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
 
 /**
- * the {@link MindMapNodePart} is responsible to create and update the {@link MindMapNodeVisual} for
- * a instance of the {@link MindMapNode}.
+ * the {@link MindMapNodePart} is responsible to create and update the
+ * {@link MindMapNodeVisual} for a instance of the {@link MindMapNode}.
  * 
  * @author hniederhausen
  *
  */
-public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> implements  ITransformableContentPart<Node, MindMapNodeVisual>, IResizableContentPart<Node, MindMapNodeVisual> {
+public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual>
+		implements ITransformableContentPart<Node, MindMapNodeVisual>, 
+				   IResizableContentPart<Node, MindMapNodeVisual>,
+				   IInlineEditablePart {
 
 	@Override
 	public MindMapNode getContent() {
@@ -54,7 +60,7 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> im
 	protected void doRefreshVisual(MindMapNodeVisual visual) {
 
 		// updateing the visuals texts and position
-		
+
 		MindMapNode node = getContent();
 		Rectangle rec = node.getBounds();
 
@@ -72,7 +78,7 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> im
 
 	@Override
 	public void transformContent(AffineTransform transform) {
-		// storing the  new position
+		// storing the new position
 		Rectangle bounds = getContent().getBounds();
 		bounds = bounds.getTranslated(transform.getTranslateX(), transform.getTranslateY());
 		getContent().setBounds(bounds);
@@ -81,8 +87,42 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual> im
 	@Override
 	public void resizeContent(Dimension size) {
 		// storing the new size
-		getContent().getBounds().setSize(size);		
+		getContent().getBounds().setSize(size);
 	}
 
+	@Override
+	public List<IInlineEditableField> getEditableFields() {
+		
+		List<IInlineEditableField> fields = Lists.newArrayList();
+		
+		fields.add(new InlineEditableTextField("title", getVisual().getTitleText(), false));
+		fields.add(new InlineEditableTextField("description", getVisual().getDescriptionText(), true));
+		
+		return fields;
+	}
+	
+	@Override
+	public void startEditing(IInlineEditableField field) {
+
+		Node editor = getVisual().startEditing(field.getPropertyName());
+		field.setEditorNode(editor);
+
+	}
+
+	@Override
+	public void endEditing(IInlineEditableField field) {
+		getVisual().endEditing(field.getPropertyName());
+		field.setEditorNode(null);
+	}
+
+	@Override
+	public void submitEditingValue(IInlineEditableField field, Object value) {
+		if ("title".equals(field.getPropertyName())) {
+			getContent().setTitle((String) value);
+		} else if ("description".equals(field.getPropertyName())) {
+			getContent().setDescription((String) value);
+		}
+		doRefreshVisual(getVisual());
+	}
 
 }
