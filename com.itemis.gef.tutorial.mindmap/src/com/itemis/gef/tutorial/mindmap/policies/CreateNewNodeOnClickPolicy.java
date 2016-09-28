@@ -1,17 +1,19 @@
 package com.itemis.gef.tutorial.mindmap.policies;
 
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.gef.geometry.planar.Rectangle;
-import org.eclipse.gef.mvc.domain.IDomain;
 import org.eclipse.gef.mvc.fx.policies.IFXOnClickPolicy;
+import org.eclipse.gef.mvc.parts.IContentPart;
+import org.eclipse.gef.mvc.parts.IRootPart;
 import org.eclipse.gef.mvc.parts.IVisualPart;
 import org.eclipse.gef.mvc.policies.AbstractInteractionPolicy;
+import org.eclipse.gef.mvc.policies.CreationPolicy;
 import org.eclipse.gef.mvc.viewer.IViewer;
 
+import com.google.common.collect.HashMultimap;
+import com.google.common.reflect.TypeToken;
 import com.itemis.gef.tutorial.mindmap.model.MindMapNode;
 import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel.Type;
-import com.itemis.gef.tutorial.mindmap.operations.CreateNodeOperation;
 import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapPart;
 
 import javafx.geometry.Point2D;
@@ -27,6 +29,7 @@ import javafx.scene.paint.Color;
  */
 public class CreateNewNodeOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
 
+	@SuppressWarnings("serial")
 	@Override
 	public void click(MouseEvent e) {
 		if (!e.isPrimaryButtonDown()) {
@@ -56,12 +59,19 @@ public class CreateNewNodeOnClickPolicy extends AbstractInteractionPolicy<Node> 
 			newNode.setColor(Color.GREENYELLOW);
 			newNode.setBounds(new Rectangle(mouseInLocal.getX(), mouseInLocal.getY(), 50, 30));
 
-			IDomain<Node> domain = viewer.getDomain();
-			try {
-				domain.execute(new CreateNodeOperation((SimpleMindMapPart) part, newNode), null);
-			} catch (ExecutionException e1) {
-				e1.printStackTrace();
-			}
+			// GEF provides the CreatePolicy and operations to add a new element to the model
+			IRootPart<Node, ? extends Node> root = getHost().getRoot();
+			// get the policy bound to the IRootPart
+			CreationPolicy<Node> creationPolicy = root.getAdapter(new TypeToken<CreationPolicy<Node>>() {
+			});
+			// initialize the policy
+			init(creationPolicy);
+			// create a IContentPart for our new model. We don't use the returned content-part 
+			creationPolicy.create(newNode,
+					(SimpleMindMapPart) part,
+					HashMultimap.<IContentPart<Node, ? extends Node>, String> create());
+			// execute the creation
+			commit(creationPolicy);
 		}
 		
 		// clear the creation selection
