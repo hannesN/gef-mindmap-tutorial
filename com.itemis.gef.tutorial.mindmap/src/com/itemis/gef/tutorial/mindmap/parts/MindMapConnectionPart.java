@@ -83,6 +83,10 @@ public class MindMapConnectionPart extends AbstractFXContentPart<Connection> {
 
 		@Override
 		protected void detachFromAnchorageVisual(IVisualPart<Node, ? extends Node> anchorage, String role) {
+			// Positions of a connection (e.g. start & end) are always determined by
+			// an anchor. The setXPoint() API sets the anchor at position X to a
+			// StaticAnchor that always returns the passed-in position.
+
 			if (role.equals(START_ROLE)) {
 				getVisual().setStartPoint(getVisual().getStartPoint());
 			} else if (role.equals(END_ROLE)) {
