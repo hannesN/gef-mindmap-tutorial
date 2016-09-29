@@ -1,14 +1,21 @@
 package com.itemis.gef.tutorial.mindmap.policies;
 
-import org.eclipse.core.commands.ExecutionException;
+import java.util.List;
+
+import org.eclipse.gef.common.collections.ObservableMultiset;
 import org.eclipse.gef.mvc.fx.policies.IFXOnClickPolicy;
+import org.eclipse.gef.mvc.parts.IContentPart;
+import org.eclipse.gef.mvc.parts.IRootPart;
 import org.eclipse.gef.mvc.parts.IVisualPart;
 import org.eclipse.gef.mvc.policies.AbstractInteractionPolicy;
+import org.eclipse.gef.mvc.policies.DeletionPolicy;
 import org.eclipse.gef.mvc.viewer.IViewer;
 
-import com.itemis.gef.tutorial.mindmap.operations.DeleteNodeOperation;
-import com.itemis.gef.tutorial.mindmap.parts.MindMapNodePart;
-import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapPart;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Multiset;
+import com.google.common.collect.Multisets;
+import com.google.common.reflect.TypeToken;
+import com.itemis.gef.tutorial.mindmap.parts.MindMapConnectionPart;
 
 import javafx.scene.Node;
 import javafx.scene.control.ContextMenu;
@@ -23,6 +30,7 @@ import javafx.scene.input.MouseEvent;
  */
 public class ShowMindMapNodeContextMenuOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
 
+	@SuppressWarnings("serial")
 	@Override
 	public void click(MouseEvent event) {
 		if (!event.isSecondaryButtonDown()) {
@@ -31,19 +39,25 @@ public class ShowMindMapNodeContextMenuOnClickPolicy extends AbstractInteraction
 		
 		MenuItem deleteNodeItem = new MenuItem("Delete Node");
 		deleteNodeItem.setOnAction((e) -> {
-			// getting the SimpleMindMapPart
-			IViewer<Node> viewer = getHost().getRoot().getViewer();
-			IVisualPart<Node, ? extends Node> part = viewer.getRootPart().getChildrenUnmodifiable().get(0);
+			IRootPart<Node, ? extends Node> root = getHost().getRoot();
+			DeletionPolicy<Node> delPolicy = root.getAdapter(new TypeToken<DeletionPolicy<Node>>() {});
+			delPolicy.init();
 			
-			if (part instanceof SimpleMindMapPart) {
-				// Creating the operation and executing it in the domain
-				try {
-					DeleteNodeOperation op = new DeleteNodeOperation((SimpleMindMapPart) part, (MindMapNodePart) getHost());
-					viewer.getDomain().execute(op, null);
-				} catch (ExecutionException e1) {
-					e1.printStackTrace();
+			// get all achoreds and check if we have a connection part
+			List<MindMapConnectionPart> connectionPartList = Lists.newArrayList();
+			for (IVisualPart<Node, ? extends Node> a : getHost().getAnchoredsUnmodifiable())  {
+				if (a instanceof MindMapConnectionPart) {
+					connectionPartList.add((MindMapConnectionPart) a);
 				}
 			}
+			// now delete the parts (couldn't do it before, because of a concurrent modification exception)
+			connectionPartList.forEach((c)->{
+				delPolicy.delete(c);
+			});
+			
+			// and finally remove the node part
+			delPolicy.delete((IContentPart<Node, ? extends Node>) getHost());
+			delPolicy.commit();
 		});
 		
 		ContextMenu ctxMenu = new ContextMenu(deleteNodeItem);

@@ -39,8 +39,11 @@ public class MindMapConnectionPart extends AbstractFXContentPart<Connection> {
 		protected SetMultimap<? extends Object, String> doGetContentAnchorages() {
 			SetMultimap<Object, String> anchorages = HashMultimap.create();
 
-			anchorages.put(getContent().getSource(), START_ROLE);
-			anchorages.put(getContent().getTarget(), END_ROLE);
+			if (getContent().getSource()!=null)
+				anchorages.put(getContent().getSource(), START_ROLE);
+			
+			if (getContent().getTarget()!=null)
+				anchorages.put(getContent().getTarget(), END_ROLE);
 
 			return anchorages;
 		}
@@ -95,4 +98,37 @@ public class MindMapConnectionPart extends AbstractFXContentPart<Connection> {
 				throw new IllegalArgumentException("Invalid role: "+role);
 			}
 		}
+		
+//		@Override
+//		protected void doAttachToContentAnchorage(Object contentAnchorage, String role) {
+////			MindMapNode node = (MindMapNode) contentAnchorage;
+////			if (END_ROLE.equals(role)) {
+////				getContent().setTarget(node);
+////				node.addIncomingConnection(getContent());
+////			} else if (END_ROLE.equals(role)) {
+////				getContent().setSource(node);
+////				node.addOutgoingConnection(getContent());
+////			} else {
+////				throw new IllegalArgumentException("Invalid role: " + role);
+////			}
+////			if (!getParent().getChildrenUnmodifiable().contains(this))
+////				getParent().addChild(this);
+//		}
+//		
+//		@Override
+//		protected void doDetachFromContentAnchorage(Object contentAnchorage, String role) {
+//			MindMapNode node = (MindMapNode) contentAnchorage;
+//			
+//			getParent().removeChild(this);
+//			
+//			if (END_ROLE.equals(role)) {
+//				getContent().setTarget(null);
+//				node.removeIncomingConnection(getContent());
+//			} else if (END_ROLE.equals(role)) {
+//				getContent().setSource(null);
+//				node.removeOutgoingConnection(getContent());
+//			} else {
+//				throw new IllegalArgumentException("Invalid role: " + role);
+//			}
+//		}
 }
