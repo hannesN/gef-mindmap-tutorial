@@ -1,6 +1,7 @@
 package com.itemis.gef.tutorial.mindmap.models;
 
-import org.eclipse.gef.mvc.parts.IVisualPart;
+
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import javafx.scene.Node;
 
@@ -12,16 +13,16 @@ import javafx.scene.Node;
  */
 public class InlineEditModel {
 
-	private IVisualPart<Node, ? extends Node> host;
+	private IVisualPart<? extends Node> host;
 	
 	private IInlineEditableField currentEditableField;
 	
 	
-	public void setHost(IVisualPart<Node, ? extends Node> host) {
+	public void setHost(IVisualPart<? extends Node> host) {
 		this.host = host;
 	}
 
-	public IVisualPart<Node, ? extends Node> getHost() {
+	public IVisualPart<? extends Node> getHost() {
 		return host;
 	}
 	

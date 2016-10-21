@@ -3,10 +3,10 @@ package com.itemis.gef.tutorial.mindmap;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.operations.IUndoContext;
 import org.eclipse.gef.common.adapt.AdapterKey;
-import org.eclipse.gef.mvc.fx.domain.FXDomain;
-import org.eclipse.gef.mvc.fx.viewer.FXViewer;
-import org.eclipse.gef.mvc.models.ContentModel;
-import org.eclipse.gef.mvc.operations.ITransactionalOperation;
+import org.eclipse.gef.mvc.fx.domain.HistoricizingDomain;
+import org.eclipse.gef.mvc.fx.domain.IDomain;
+import org.eclipse.gef.mvc.fx.operations.ITransactionalOperation;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 
 import com.google.inject.Guice;
 import com.itemis.gef.tutorial.mindmap.model.SimpleMindMap;
@@ -38,7 +38,7 @@ import javafx.stage.Stage;
 public class SimpleMindMapApplication extends Application {
 
 	private Stage primaryStage;
-	private FXDomain domain;
+	private HistoricizingDomain domain;
 
 	@Override
 	public void start(Stage primaryStage) throws Exception {
@@ -46,7 +46,7 @@ public class SimpleMindMapApplication extends Application {
 		SimpleMindMapModul module = new SimpleMindMapModul();
 		this.primaryStage = primaryStage;
 		// create domain using guice
-		this.domain = Guice.createInjector(module).getInstance(FXDomain.class);
+		this.domain = (HistoricizingDomain) Guice.createInjector(module).getInstance(IDomain.class);
 		
 		// create viewers
 		hookViewers();
@@ -75,9 +75,9 @@ public class SimpleMindMapApplication extends Application {
 
 		SimpleMindMap mindMap = fac.createComplexExample();
 
-		FXViewer viewer = getContentViewer();
+		IViewer viewer = getContentViewer();
 
-		viewer.getAdapter(ContentModel.class).getContents().setAll(mindMap);
+		viewer.getContents().setAll(mindMap);
 
 	}
 
@@ -86,8 +86,8 @@ public class SimpleMindMapApplication extends Application {
 	 * 
 	 * @return
 	 */
-	private FXViewer getContentViewer() {
-		FXViewer viewer = domain.getAdapter(AdapterKey.get(FXViewer.class, FXDomain.CONTENT_VIEWER_ROLE));
+	private IViewer getContentViewer() {
+		IViewer viewer = domain.getAdapter(AdapterKey.get(IViewer.class, IDomain.CONTENT_VIEWER_ROLE));
 		return viewer;
 	}
 

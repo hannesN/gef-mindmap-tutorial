@@ -6,8 +6,8 @@ import java.util.List;
 import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.fx.anchors.IAnchor;
 import org.eclipse.gef.fx.nodes.Connection;
-import org.eclipse.gef.mvc.fx.parts.AbstractFXContentPart;
-import org.eclipse.gef.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.AbstractContentPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.SetMultimap;
@@ -25,7 +25,7 @@ import javafx.scene.Node;
  * @author hniederhausen
  *
  */
-public class MindMapConnectionPart extends AbstractFXContentPart<Connection> {
+public class MindMapConnectionPart extends AbstractContentPart<Connection> {
 		
 		public static final String START_ROLE = "START";
 		public static final String END_ROLE = "END";
@@ -51,7 +51,7 @@ public class MindMapConnectionPart extends AbstractFXContentPart<Connection> {
 		}
 
 		@Override
-		protected Connection createVisual() {
+		protected Connection doCreateVisual() {
 			return new MindMapConnectionVisual();
 		}
 
@@ -61,7 +61,7 @@ public class MindMapConnectionPart extends AbstractFXContentPart<Connection> {
 		}
 		
 		@Override
-		protected void attachToAnchorageVisual(IVisualPart<Node, ? extends Node> anchorage, String role) {
+		protected void doAttachToAnchorageVisual(IVisualPart<? extends Node> anchorage, String role) {
 			
 			// find a anchor provider, which must be registered in the module
 			// be aware to use the right interfaces (Provider is used a lot)
@@ -82,7 +82,7 @@ public class MindMapConnectionPart extends AbstractFXContentPart<Connection> {
 		}
 
 		@Override
-		protected void detachFromAnchorageVisual(IVisualPart<Node, ? extends Node> anchorage, String role) {
+		protected void doDetachFromAnchorageVisual(IVisualPart<? extends Node> anchorage, String role) {
 			// Positions of a connection (e.g. start & end) are always determined by
 			// an anchor. The setXPoint() API sets the anchor at position X to a
 			// StaticAnchor that always returns the passed-in position.

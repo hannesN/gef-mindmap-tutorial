@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import org.eclipse.gef.mvc.behaviors.IBehavior;
-import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
-import org.eclipse.gef.mvc.parts.IHandlePart;
-import org.eclipse.gef.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.behaviors.IBehavior;
+import org.eclipse.gef.mvc.fx.parts.DefaultSelectionHandlePartFactory;
+import org.eclipse.gef.mvc.fx.parts.IHandlePart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import com.google.common.collect.Lists;
 import com.google.inject.Inject;
@@ -22,16 +22,16 @@ import javafx.scene.Node;
  * @author hniederhausen
  *
  */
-public class MindMapNodeSelectionHandlesFactory extends FXDefaultSelectionHandlePartFactory {
+public class MindMapNodeSelectionHandlesFactory extends DefaultSelectionHandlePartFactory {
 
 	@Inject
 	private Injector injector;
 
 	@Override
-	public List<IHandlePart<Node, ? extends Node>> createHandleParts(
-			List<? extends IVisualPart<Node, ? extends Node>> targets, IBehavior<Node> contextBehavior,
+	public List<IHandlePart<? extends Node>> createHandleParts(
+			List<? extends IVisualPart<? extends Node>> targets, IBehavior contextBehavior,
 			Map<Object, Object> contextMap) {
-		List<IHandlePart<Node, ? extends Node>> handleParts = Lists.newArrayList(); 
+		List<IHandlePart<? extends Node>> handleParts = Lists.newArrayList(); 
 		
 		handleParts.addAll(super.createHandleParts(targets, contextBehavior, contextMap));
 		
@@ -43,8 +43,8 @@ public class MindMapNodeSelectionHandlesFactory extends FXDefaultSelectionHandle
 		return handleParts;
 	}
 
-	private List<IHandlePart<Node, ? extends Node>> createHandles(IVisualPart<Node, ? extends Node> target) {
-		List<IHandlePart<Node, ? extends Node>> handles = new ArrayList<>();
+	private List<IHandlePart<? extends Node>> createHandles(IVisualPart<? extends Node> target) {
+		List<IHandlePart<? extends Node>> handles = new ArrayList<>();
 
 		if (target instanceof MindMapNodePart) {
 			// create root handle part

@@ -5,7 +5,7 @@ import org.eclipse.gef.fx.anchors.DynamicAnchor;
 import org.eclipse.gef.fx.anchors.IAnchor;
 import org.eclipse.gef.fx.anchors.DynamicAnchor.AnchorageReferenceGeometry;
 import org.eclipse.gef.geometry.planar.IGeometry;
-import org.eclipse.gef.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Provider;
@@ -23,10 +23,10 @@ import javafx.scene.Node;
  * @author hniederhausen
  *
  */
-public class SimpleMindMapAnchorProvider extends IAdaptable.Bound.Impl<IVisualPart<Node, ? extends Node>> implements Provider<IAnchor> {
+public class SimpleMindMapAnchorProvider extends IAdaptable.Bound.Impl<IVisualPart<? extends Node>> implements Provider<IAnchor> {
 
 	// the part it is bound to
-	private IVisualPart<Node, ? extends Node> host;
+	private IVisualPart<? extends Node> host;
 	
 	// the anchor in case we already created one
 	private DynamicAnchor anchor;
@@ -60,17 +60,17 @@ public class SimpleMindMapAnchorProvider extends IAdaptable.Bound.Impl<IVisualPa
 	}
 	
 	@Override
-	public IVisualPart<Node, ? extends Node> getAdaptable() {
+	public IVisualPart<? extends Node> getAdaptable() {
 		return host;
 	}
 
 	@Override
-	public void setAdaptable(IVisualPart<Node, ? extends Node> adaptable) {
+	public void setAdaptable(IVisualPart<? extends Node> adaptable) {
 		this.host = adaptable;
 	}
 
 	@Override
-	public ReadOnlyObjectProperty<IVisualPart<Node, ? extends Node>> adaptableProperty() {
+	public ReadOnlyObjectProperty<IVisualPart<? extends Node>> adaptableProperty() {
 		return null;
 	}
 

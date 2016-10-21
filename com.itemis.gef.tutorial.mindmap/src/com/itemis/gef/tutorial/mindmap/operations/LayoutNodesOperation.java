@@ -23,8 +23,8 @@ import org.eclipse.gef.graph.Node;
 import org.eclipse.gef.layout.LayoutContext;
 import org.eclipse.gef.layout.LayoutProperties;
 import org.eclipse.gef.layout.algorithms.RadialLayoutAlgorithm;
-import org.eclipse.gef.mvc.operations.ITransactionalOperation;
-import org.eclipse.gef.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.operations.ITransactionalOperation;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import com.google.common.collect.Maps;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapConnectionPart;
@@ -69,16 +69,16 @@ public class LayoutNodesOperation extends AbstractOperation implements ITransact
 		
 		Map<MindMapNodePart, Node> layoutedNodes = Maps.newHashMap();
 		
-		for (IVisualPart<javafx.scene.Node, ? extends javafx.scene.Node> item : mindMapPart.getChildrenUnmodifiable()) {
+		for (IVisualPart<? extends javafx.scene.Node> item : mindMapPart.getChildrenUnmodifiable()) {
 			if (item instanceof MindMapNodePart) {
 				getGraphNode(layoutedNodes , ((MindMapNodePart) item)).setGraph(graph); 
 			} else {
 				Node srcNode = null;
 				Node trgNode = null;
 				
-				ObservableSetMultimap<IVisualPart<javafx.scene.Node, ? extends javafx.scene.Node>, String> anchorages = item.getAnchoragesUnmodifiable();
+				ObservableSetMultimap<IVisualPart<? extends javafx.scene.Node>, String> anchorages = item.getAnchoragesUnmodifiable();
 				
-				for(Entry<IVisualPart<javafx.scene.Node, ? extends javafx.scene.Node>, String> e : anchorages.entries()) {
+				for(Entry<IVisualPart<? extends javafx.scene.Node>, String> e : anchorages.entries()) {
 					if (MindMapConnectionPart.START_ROLE.equals(e.getValue())) {
 						srcNode = getGraphNode(layoutedNodes, (MindMapNodePart) e.getKey());
 						srcNode.setGraph(graph);

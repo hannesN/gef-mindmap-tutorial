@@ -3,9 +3,9 @@ package com.itemis.gef.tutorial.mindmap.parts.handles;
 import java.util.Set;
 
 import org.eclipse.gef.common.collections.SetMultimapChangeListener;
-import org.eclipse.gef.mvc.fx.parts.AbstractFXHandlePart;
-import org.eclipse.gef.mvc.parts.IVisualPart;
-import org.eclipse.gef.mvc.viewer.IViewer;
+import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 
 import javafx.scene.Node;
 
@@ -20,14 +20,14 @@ import javafx.scene.Node;
  * @author hniederhausen
  *
  */
-public abstract class AbstractMindMapHandlePart<T extends Node> extends AbstractFXHandlePart<T> {
+public abstract class AbstractMindMapHandlePart<T extends Node> extends AbstractHandlePart<T> {
 
 	private boolean registered = false;
 	
-	private final SetMultimapChangeListener<IVisualPart<Node, ? extends Node>, String> parentAnchoragesChangeListener = new SetMultimapChangeListener<IVisualPart<Node, ? extends Node>, String>() {
+	private final SetMultimapChangeListener<IVisualPart<? extends Node>, String> parentAnchoragesChangeListener = new SetMultimapChangeListener<IVisualPart<? extends Node>, String>() {
 
-		private IViewer<Node> getViewer(Set<? extends IVisualPart<Node, ? extends Node>> anchorages) {
-			for (IVisualPart<Node, ? extends Node> anchorage : anchorages) {
+		private IViewer getViewer(Set<? extends IVisualPart<? extends Node>> anchorages) {
+			for (IVisualPart<? extends Node> anchorage : anchorages) {
 				if (anchorage.getRoot() != null && anchorage.getRoot().getViewer() != null) {
 					return anchorage.getRoot().getViewer();
 				}
@@ -36,9 +36,9 @@ public abstract class AbstractMindMapHandlePart<T extends Node> extends Abstract
 		}
 		@Override
 		public void onChanged(
-				org.eclipse.gef.common.collections.SetMultimapChangeListener.Change<? extends IVisualPart<Node, ? extends Node>, ? extends String> change) {
-			IViewer<Node> oldViewer = getViewer(change.getPreviousContents().keySet());
-			IViewer<Node> newViewer = getViewer(change.getSetMultimap().keySet());
+				org.eclipse.gef.common.collections.SetMultimapChangeListener.Change<? extends IVisualPart<? extends Node>, ? extends String> change) {
+			IViewer oldViewer = getViewer(change.getPreviousContents().keySet());
+			IViewer newViewer = getViewer(change.getSetMultimap().keySet());
 			if (registered && oldViewer != null && oldViewer != newViewer) {
 				unregister(oldViewer);
 			}
@@ -53,7 +53,7 @@ public abstract class AbstractMindMapHandlePart<T extends Node> extends Abstract
 	}
 
 	@Override
-	protected void register(IViewer<Node> viewer) {
+	protected void register(IViewer viewer) {
 		if (registered) {
 			return;
 		}
@@ -62,7 +62,7 @@ public abstract class AbstractMindMapHandlePart<T extends Node> extends Abstract
 	}
 
 	@Override
-	public void setParent(IVisualPart<Node, ? extends Node> newParent) {
+	public void setParent(IVisualPart<? extends Node> newParent) {
 		if (getParent() != null) {
 			getParent().getAnchoragesUnmodifiable().removeListener(parentAnchoragesChangeListener);
 		}
@@ -73,7 +73,7 @@ public abstract class AbstractMindMapHandlePart<T extends Node> extends Abstract
 	}
 
 	@Override
-	protected void unregister(IViewer<Node> viewer) {
+	protected void unregister(IViewer viewer) {
 		if (!registered) {
 			return;
 		}

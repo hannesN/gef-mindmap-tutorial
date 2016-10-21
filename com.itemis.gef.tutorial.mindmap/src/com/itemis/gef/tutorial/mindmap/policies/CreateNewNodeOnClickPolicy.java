@@ -1,16 +1,15 @@
 package com.itemis.gef.tutorial.mindmap.policies;
 
 import org.eclipse.gef.geometry.planar.Rectangle;
-import org.eclipse.gef.mvc.fx.policies.IFXOnClickPolicy;
-import org.eclipse.gef.mvc.parts.IContentPart;
-import org.eclipse.gef.mvc.parts.IRootPart;
-import org.eclipse.gef.mvc.parts.IVisualPart;
-import org.eclipse.gef.mvc.policies.AbstractInteractionPolicy;
-import org.eclipse.gef.mvc.policies.CreationPolicy;
-import org.eclipse.gef.mvc.viewer.IViewer;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IRootPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.policies.AbstractInteractionPolicy;
+import org.eclipse.gef.mvc.fx.policies.CreationPolicy;
+import org.eclipse.gef.mvc.fx.policies.IOnClickPolicy;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 
 import com.google.common.collect.HashMultimap;
-import com.google.common.reflect.TypeToken;
 import com.itemis.gef.tutorial.mindmap.model.MindMapNode;
 import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel;
 import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel.Type;
@@ -27,16 +26,15 @@ import javafx.scene.paint.Color;
  * @author hniederhausen
  *
  */
-public class CreateNewNodeOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
+public class CreateNewNodeOnClickPolicy extends AbstractInteractionPolicy implements IOnClickPolicy {
 
-	@SuppressWarnings("serial")
 	@Override
 	public void click(MouseEvent e) {
 		if (!e.isPrimaryButtonDown()) {
 			return; // wrong mouse button
 		}
 
-		IViewer<Node> viewer = getHost().getRoot().getViewer();
+		IViewer viewer = getHost().getRoot().getViewer();
 		ItemCreationModel creationModel = viewer.getAdapter(ItemCreationModel.class);
 		if (creationModel == null) {
 			throw new IllegalStateException("No ItemCreationModel bound to viewer!");
@@ -46,7 +44,7 @@ public class CreateNewNodeOnClickPolicy extends AbstractInteractionPolicy<Node> 
 			// don't want to create a node
 			return;
 		}
-		IVisualPart<Node, ? extends Node> part = viewer.getRootPart().getChildrenUnmodifiable().get(0);
+		IVisualPart<? extends Node> part = viewer.getRootPart().getChildrenUnmodifiable().get(0);
 		
 		if (part instanceof SimpleMindMapPart) {
 			// calculate the mouse coordinates
@@ -60,16 +58,15 @@ public class CreateNewNodeOnClickPolicy extends AbstractInteractionPolicy<Node> 
 			newNode.setBounds(new Rectangle(mouseInLocal.getX(), mouseInLocal.getY(), 50, 30));
 
 			// GEF provides the CreatePolicy and operations to add a new element to the model
-			IRootPart<Node, ? extends Node> root = getHost().getRoot();
+			IRootPart<? extends Node> root = getHost().getRoot();
 			// get the policy bound to the IRootPart
-			CreationPolicy<Node> creationPolicy = root.getAdapter(new TypeToken<CreationPolicy<Node>>() {
-			});
+			CreationPolicy creationPolicy = root.getAdapter(CreationPolicy.class);
 			// initialize the policy
 			init(creationPolicy);
 			// create a IContentPart for our new model. We don't use the returned content-part 
 			creationPolicy.create(newNode,
 					(SimpleMindMapPart) part,
-					HashMultimap.<IContentPart<Node, ? extends Node>, String> create());
+					HashMultimap.<IContentPart<? extends Node>, String> create());
 			// execute the creation
 			commit(creationPolicy);
 		}

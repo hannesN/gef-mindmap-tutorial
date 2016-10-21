@@ -4,14 +4,13 @@ import java.util.ArrayList;
 import java.util.Optional;
 
 import org.eclipse.core.commands.ExecutionException;
-import org.eclipse.gef.mvc.fx.policies.IFXOnClickPolicy;
-import org.eclipse.gef.mvc.operations.ITransactionalOperation;
-import org.eclipse.gef.mvc.parts.IRootPart;
-import org.eclipse.gef.mvc.parts.IVisualPart;
-import org.eclipse.gef.mvc.policies.AbstractInteractionPolicy;
-import org.eclipse.gef.mvc.policies.DeletionPolicy;
+import org.eclipse.gef.mvc.fx.operations.ITransactionalOperation;
+import org.eclipse.gef.mvc.fx.parts.IRootPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.policies.AbstractInteractionPolicy;
+import org.eclipse.gef.mvc.fx.policies.DeletionPolicy;
+import org.eclipse.gef.mvc.fx.policies.IOnClickPolicy;
 
-import com.google.common.reflect.TypeToken;
 import com.itemis.gef.tutorial.mindmap.operations.SetMindMapNodeColorOperation;
 import com.itemis.gef.tutorial.mindmap.operations.SetMindMapNodeDescriptionOperation;
 import com.itemis.gef.tutorial.mindmap.operations.SetMindMapNodeTitleOperation;
@@ -34,8 +33,7 @@ import javafx.scene.shape.Rectangle;
  * @author hniederhausen
  *
  */
-public class ShowMindMapNodeContextMenuOnClickPolicy extends AbstractInteractionPolicy<Node>
-		implements IFXOnClickPolicy {
+public class ShowMindMapNodeContextMenuOnClickPolicy extends AbstractInteractionPolicy implements IOnClickPolicy {
 
 	@Override
 	public void click(MouseEvent event) {
@@ -45,14 +43,12 @@ public class ShowMindMapNodeContextMenuOnClickPolicy extends AbstractInteraction
 
 		MenuItem deleteNodeItem = new MenuItem("Delete Node");
 		deleteNodeItem.setOnAction((e) -> {
-			IRootPart<Node, ? extends Node> root = getHost().getRoot();
-			@SuppressWarnings("serial")
-			DeletionPolicy<Node> delPolicy = root.getAdapter(new TypeToken<DeletionPolicy<Node>>() {
-			});
+			IRootPart<? extends Node> root = getHost().getRoot();
+			DeletionPolicy delPolicy = root.getAdapter(DeletionPolicy.class);
 			init(delPolicy);
 
 			// get all achoreds and check if we have a connection part
-			for (IVisualPart<Node, ? extends Node> a : new ArrayList<>(getHost().getAnchoredsUnmodifiable())) {
+			for (IVisualPart<? extends Node> a : new ArrayList<>(getHost().getAnchoredsUnmodifiable())) {
 				if (a instanceof MindMapConnectionPart) {
 					// now delete the parts (couldn't do it before, because of a
 					// concurrent modification exception)

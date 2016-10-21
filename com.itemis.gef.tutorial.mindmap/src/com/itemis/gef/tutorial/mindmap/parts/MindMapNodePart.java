@@ -6,10 +6,9 @@ import java.util.List;
 import org.eclipse.gef.geometry.planar.AffineTransform;
 import org.eclipse.gef.geometry.planar.Dimension;
 import org.eclipse.gef.geometry.planar.Rectangle;
-import org.eclipse.gef.mvc.fx.parts.AbstractFXContentPart;
-import org.eclipse.gef.mvc.fx.policies.FXTransformPolicy;
-import org.eclipse.gef.mvc.parts.IResizableContentPart;
-import org.eclipse.gef.mvc.parts.ITransformableContentPart;
+import org.eclipse.gef.mvc.fx.parts.AbstractContentPart;
+import org.eclipse.gef.mvc.fx.parts.IResizableContentPart;
+import org.eclipse.gef.mvc.fx.parts.ITransformableContentPart;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
@@ -21,6 +20,7 @@ import com.itemis.gef.tutorial.mindmap.visuals.MindMapNodeVisual;
 
 import javafx.scene.Node;
 import javafx.scene.transform.Affine;
+import javafx.scene.transform.Translate;
 
 /**
  * the {@link MindMapNodePart} is responsible to create and update the
@@ -29,9 +29,9 @@ import javafx.scene.transform.Affine;
  * @author hniederhausen
  *
  */
-public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual>
-		implements ITransformableContentPart<Node, MindMapNodeVisual>, 
-				   IResizableContentPart<Node, MindMapNodeVisual>,
+public class MindMapNodePart extends AbstractContentPart<MindMapNodeVisual>
+		implements ITransformableContentPart<MindMapNodeVisual>, 
+				   IResizableContentPart<MindMapNodeVisual>,
 				   IInlineEditablePart {
 
 	@Override
@@ -52,13 +52,12 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual>
 	}
 
 	@Override
-	protected MindMapNodeVisual createVisual() {
+	protected MindMapNodeVisual doCreateVisual() {
 		return new MindMapNodeVisual();
 	}
 
 	@Override
 	protected void doRefreshVisual(MindMapNodeVisual visual) {
-
 		// updateing the visuals texts and position
 
 		MindMapNode node = getContent();
@@ -70,10 +69,7 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual>
 
 		visual.resizeShape(rec.getWidth(), rec.getHeight());
 
-		Affine affine = getAdapter(FXTransformPolicy.TRANSFORM_PROVIDER_KEY).get();
-		affine.setTx(rec.getX());
-		affine.setTy(rec.getY());
-
+		transformVisual(new Affine(new Translate(rec.getX(), rec.getY())));
 	}
 
 	@Override
@@ -123,6 +119,17 @@ public class MindMapNodePart extends AbstractFXContentPart<MindMapNodeVisual>
 			getContent().setDescription((String) value);
 		}
 		doRefreshVisual(getVisual());
+	}
+
+	@Override
+	public Dimension getContentSize() {
+		return getContent().getBounds().getSize();
+	}
+
+	@Override
+	public AffineTransform getContentTransform() {
+		Rectangle bounds = getContent().getBounds();
+		return new AffineTransform().setToTranslation(bounds.getX(), bounds.getY());
 	}
 
 }

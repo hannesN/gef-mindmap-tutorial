@@ -8,14 +8,14 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.util.Collections;
 
+import javax.swing.text.html.parser.ContentModel;
+
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.gef.mvc.fx.ui.MvcFxUiModule;
 import org.eclipse.gef.mvc.fx.ui.parts.AbstractFXEditor;
-import org.eclipse.gef.mvc.fx.viewer.FXViewer;
-import org.eclipse.gef.mvc.models.ContentModel;
-import org.eclipse.gef.mvc.viewer.IViewer;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 import org.eclipse.ui.IEditorInput;
 import org.eclipse.ui.IEditorSite;
 import org.eclipse.ui.IFileEditorInput;
@@ -53,9 +53,7 @@ public class SimpleMindMapEditor extends AbstractFXEditor {
 
 	@Override
 	public void doSave(IProgressMonitor monitor) {
-		// retrieve the viewer's content
-		ContentModel contentModel = getDomain().getAdapter(IViewer.class).getAdapter(ContentModel.class);
-		SimpleMindMap mindmap = (SimpleMindMap) contentModel.getContents().iterator().next();
+		SimpleMindMap mindmap = (SimpleMindMap) getContentViewer().getContents().get(0);
 		try { // serialize mindmap
 			ByteArrayOutputStream out = new ByteArrayOutputStream();
 			ObjectOutputStream oos = new ObjectOutputStream(out);
@@ -108,8 +106,7 @@ public class SimpleMindMapEditor extends AbstractFXEditor {
 		} catch (Exception e) {
 			throw new PartInitException("Could not load input", e);
 		}
-		ContentModel contentModel = getDomain().getAdapter(IViewer.class).getAdapter(ContentModel.class);
-		contentModel.getContents().setAll(Collections.singletonList(mindmap));
+		getContentViewer().getContents().setAll(Collections.singletonList(mindmap));
 	}
 
 	/**
@@ -118,7 +115,7 @@ public class SimpleMindMapEditor extends AbstractFXEditor {
 	@Override
 	protected void hookViewers() {
 
-		final FXViewer contentViewer = getContentViewer();
+		final IViewer contentViewer = getContentViewer();
 
 		// creating parent pane for Canvas and button pane
 		BorderPane pane = new BorderPane();

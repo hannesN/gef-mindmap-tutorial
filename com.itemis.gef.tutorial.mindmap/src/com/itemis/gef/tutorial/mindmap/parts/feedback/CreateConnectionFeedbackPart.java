@@ -4,8 +4,8 @@ import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.fx.anchors.IAnchor;
 import org.eclipse.gef.fx.anchors.StaticAnchor;
 import org.eclipse.gef.geometry.planar.Point;
-import org.eclipse.gef.mvc.parts.AbstractFeedbackPart;
-import org.eclipse.gef.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.AbstractFeedbackPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import com.google.common.reflect.TypeToken;
 import com.google.inject.Provider;
@@ -22,19 +22,19 @@ import javafx.scene.input.MouseEvent;
  * @author hniederhausen
  *
  */
-public class CreateConnectionFeedbackPart extends AbstractFeedbackPart<Node, Node> {
+public class CreateConnectionFeedbackPart extends AbstractFeedbackPart<MindMapConnectionVisual> {
 
 	@Override
-	protected Node createVisual() {
+	protected MindMapConnectionVisual doCreateVisual() {
 		return new MindMapConnectionVisual();
 	}
 
 	@Override
-	protected void doRefreshVisual(Node visual) {
+	protected void doRefreshVisual(MindMapConnectionVisual visual) {
 	}
 
 	@Override
-	public void attachToAnchorageVisual(IVisualPart<Node, ? extends Node> anchorage, String role) {
+	public void doAttachToAnchorageVisual(IVisualPart<? extends Node> anchorage, String role) {
 		// find a anchor provider, which must be registered in the module
 		// be aware to use the right interfaces (Proviser is used a lot)
 		@SuppressWarnings("serial")
@@ -55,7 +55,7 @@ public class CreateConnectionFeedbackPart extends AbstractFeedbackPart<Node, Nod
 	}
 	
 	@Override
-	protected void detachFromAnchorageVisual(IVisualPart<Node, ? extends Node> anchorage, String role) {
+	protected void doDetachFromAnchorageVisual(IVisualPart<? extends Node> anchorage, String role) {
 		getVisual().setStartPoint(getVisual().getStartPoint());
 		((MousePositionAnchor) getVisual().getEndAnchor()).dispose();
 		getVisual().setEndPoint(getVisual().getEndPoint());

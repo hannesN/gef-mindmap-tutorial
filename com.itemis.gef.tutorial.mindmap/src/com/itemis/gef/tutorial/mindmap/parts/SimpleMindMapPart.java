@@ -2,8 +2,8 @@ package com.itemis.gef.tutorial.mindmap.parts;
 
 import java.util.List;
 
-import org.eclipse.gef.mvc.fx.parts.AbstractFXContentPart;
-import org.eclipse.gef.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.AbstractContentPart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Lists;
@@ -23,7 +23,7 @@ import javafx.scene.Node;
  * @author hniederhausen
  *
  */
-public class SimpleMindMapPart extends AbstractFXContentPart<Group> {
+public class SimpleMindMapPart extends AbstractContentPart<Group> {
 
 	@Override
 	public SimpleMindMap getContent() {
@@ -41,19 +41,19 @@ public class SimpleMindMapPart extends AbstractFXContentPart<Group> {
 	}
 
 	@Override
-	protected Group createVisual() {
+	protected Group doCreateVisual() {
 		// the visual is just a container for our child visuals (nodes and
 		// connections)
 		return new Group();
 	}
 
 	@Override
-	protected void addChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
+	protected void doAddChildVisual(IVisualPart<? extends Node> child, int index) {
 		getVisual().getChildren().add(child.getVisual());
 	}
 
 	@Override
-	protected void removeChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
+	protected void doRemoveChildVisual(IVisualPart<? extends Node> child, int index) {
 		getVisual().getChildren().remove(child.getVisual());
 	}
 

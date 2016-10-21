@@ -1,7 +1,7 @@
 package com.itemis.gef.tutorial.mindmap.parts.handles;
 
-import org.eclipse.gef.mvc.fx.parts.AbstractFXHandlePart;
-import org.eclipse.gef.mvc.parts.IVisualPart;
+import org.eclipse.gef.mvc.fx.parts.AbstractHandlePart;
+import org.eclipse.gef.mvc.fx.parts.IVisualPart;
 
 import com.google.common.collect.SetMultimap;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapNodePart;
@@ -21,10 +21,10 @@ import javafx.scene.layout.VBox;
  * @author hniederhausen
  *
  */
-public class MindMapNodeHandleRootPart extends AbstractFXHandlePart<VBox> {
+public class MindMapNodeHandleRootPart extends AbstractHandlePart<VBox> {
 
 	@Override
-	protected VBox createVisual() {
+	protected VBox doCreateVisual() {
 		VBox vBox = new VBox();
 
 		vBox.setPickOnBounds(true);
@@ -34,12 +34,12 @@ public class MindMapNodeHandleRootPart extends AbstractFXHandlePart<VBox> {
 	@Override
 	protected void doRefreshVisual(VBox visual) {
 		// check if we have a host
-		SetMultimap<IVisualPart<Node, ? extends Node>, String> anchorages = getAnchoragesUnmodifiable();
+		SetMultimap<IVisualPart<? extends Node>, String> anchorages = getAnchoragesUnmodifiable();
 		if (anchorages.isEmpty()) {
 			return;
 		}
 
-		IVisualPart<Node, ? extends Node> anchorage = anchorages.keys().iterator().next();
+		IVisualPart<? extends Node> anchorage = anchorages.keys().iterator().next();
 		Node hostVisual = anchorage.getVisual();
 	
 		// we have the visual, position next to it
@@ -54,12 +54,12 @@ public class MindMapNodeHandleRootPart extends AbstractFXHandlePart<VBox> {
 	}
 
 	@Override
-	protected void addChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
+	protected void doAddChildVisual(IVisualPart<? extends Node> child, int index) {
 		getVisual().getChildren().add(index, child.getVisual());
 	}
 
 	@Override
-	protected void removeChildVisual(IVisualPart<Node, ? extends Node> child, int index) {
+	protected void doRemoveChildVisual(IVisualPart<? extends Node> child, int index) {
 		getVisual().getChildren().remove(index);
 	}
 }

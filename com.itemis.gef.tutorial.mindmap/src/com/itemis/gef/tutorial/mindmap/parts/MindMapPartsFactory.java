@@ -2,15 +2,15 @@ package com.itemis.gef.tutorial.mindmap.parts;
 
 import java.util.Map;
 
-import org.eclipse.gef.mvc.behaviors.IBehavior;
-import org.eclipse.gef.mvc.parts.IContentPart;
-import org.eclipse.gef.mvc.parts.IContentPartFactory;
+import org.eclipse.gef.mvc.fx.behaviors.IBehavior;
+import org.eclipse.gef.mvc.fx.parts.IContentPart;
+import org.eclipse.gef.mvc.fx.parts.IContentPartFactory;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
 import com.itemis.gef.tutorial.mindmap.model.MindMapConnection;
-import com.itemis.gef.tutorial.mindmap.model.SimpleMindMap;
 import com.itemis.gef.tutorial.mindmap.model.MindMapNode;
+import com.itemis.gef.tutorial.mindmap.model.SimpleMindMap;
 
 import javafx.scene.Node;
 
@@ -21,13 +21,13 @@ import javafx.scene.Node;
  * @author hniederhausen
  *
  */
-public class MindMapPartsFactory implements IContentPartFactory<Node> {
+public class MindMapPartsFactory implements IContentPartFactory {
 	
 	@Inject
 	private Injector injector;
 	
 	@Override
-	public IContentPart<Node, ? extends Node> createContentPart(Object content, IBehavior<Node> contextBehavior,
+	public IContentPart<? extends Node> createContentPart(Object content, IBehavior contextBehavior,
 			Map<Object, Object> contextMap) {
 
 		

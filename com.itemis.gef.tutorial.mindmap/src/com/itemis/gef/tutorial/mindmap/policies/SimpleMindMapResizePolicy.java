@@ -1,6 +1,6 @@
 package com.itemis.gef.tutorial.mindmap.policies;
 
-import org.eclipse.gef.mvc.fx.policies.FXResizePolicy;
+import org.eclipse.gef.mvc.fx.policies.ResizePolicy;
 
 import com.itemis.gef.tutorial.mindmap.visuals.MindMapNodeVisual;
 
@@ -12,7 +12,7 @@ import javafx.scene.Node;
  * @author hniederhausen
  *
  */
-public class SimpleMindMapResizePolicy extends FXResizePolicy {
+public class SimpleMindMapResizePolicy extends ResizePolicy {
 
 	@Override
 	protected Node getVisualToResize() {

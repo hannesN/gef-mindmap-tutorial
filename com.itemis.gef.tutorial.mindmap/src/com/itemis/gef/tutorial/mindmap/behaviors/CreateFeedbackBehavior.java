@@ -1,12 +1,11 @@
 package com.itemis.gef.tutorial.mindmap.behaviors;
 
-import org.eclipse.gef.mvc.behaviors.AbstractBehavior;
-import org.eclipse.gef.mvc.parts.IFeedbackPartFactory;
-import org.eclipse.gef.mvc.viewer.IViewer;
+
+import org.eclipse.gef.mvc.fx.behaviors.AbstractBehavior;
+import org.eclipse.gef.mvc.fx.parts.IFeedbackPartFactory;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 
 import com.itemis.gef.tutorial.mindmap.models.ItemCreationModel;
-
-import javafx.scene.Node;
 
 /**
  * The behavior is listening to changes in the {@link ItemCreationModel} and creates a connection feedback if necessary.
@@ -14,7 +13,7 @@ import javafx.scene.Node;
  * @author hniederhausen
  *
  */
-public class CreateFeedbackBehavior extends AbstractBehavior<Node> {
+public class CreateFeedbackBehavior extends AbstractBehavior {
 
 	/**
 	 * The adapter role for the {@link IFeedbackPartFactory} that is used to
@@ -44,7 +43,7 @@ public class CreateFeedbackBehavior extends AbstractBehavior<Node> {
 	}
 
 	@Override
-	protected IFeedbackPartFactory<Node> getFeedbackPartFactory(IViewer<Node> viewer) {
+	protected IFeedbackPartFactory getFeedbackPartFactory(IViewer viewer) {
 		return getFeedbackPartFactory(viewer, CREATE_FEEDBACK_PART_FACTORY);
 	}
 

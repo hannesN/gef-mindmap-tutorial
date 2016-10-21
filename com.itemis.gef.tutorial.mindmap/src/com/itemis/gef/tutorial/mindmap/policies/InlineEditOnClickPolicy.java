@@ -2,9 +2,9 @@ package com.itemis.gef.tutorial.mindmap.policies;
 
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.runtime.NullProgressMonitor;
-import org.eclipse.gef.mvc.fx.policies.IFXOnClickPolicy;
-import org.eclipse.gef.mvc.operations.ITransactionalOperation;
-import org.eclipse.gef.mvc.policies.AbstractInteractionPolicy;
+import org.eclipse.gef.mvc.fx.operations.ITransactionalOperation;
+import org.eclipse.gef.mvc.fx.policies.AbstractInteractionPolicy;
+import org.eclipse.gef.mvc.fx.policies.IOnClickPolicy;
 
 import com.itemis.gef.tutorial.mindmap.models.IInlineEditableField;
 import com.itemis.gef.tutorial.mindmap.models.InlineEditModel;
@@ -22,7 +22,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 
-public class InlineEditOnClickPolicy extends AbstractInteractionPolicy<Node> implements IFXOnClickPolicy {
+public class InlineEditOnClickPolicy extends AbstractInteractionPolicy implements IOnClickPolicy {
 
 	@Override
 	public void click(MouseEvent e) {

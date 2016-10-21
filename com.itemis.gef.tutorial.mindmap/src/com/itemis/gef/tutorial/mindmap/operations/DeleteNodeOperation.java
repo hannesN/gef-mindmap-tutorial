@@ -9,21 +9,19 @@ import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.Status;
-import org.eclipse.gef.mvc.models.FocusModel;
-import org.eclipse.gef.mvc.models.SelectionModel;
-import org.eclipse.gef.mvc.operations.ChangeFocusOperation;
-import org.eclipse.gef.mvc.operations.ChangeSelectionOperation;
-import org.eclipse.gef.mvc.operations.ITransactionalOperation;
-import org.eclipse.gef.mvc.operations.ReverseUndoCompositeOperation;
-import org.eclipse.gef.mvc.viewer.IViewer;
+import org.eclipse.gef.mvc.fx.models.FocusModel;
+import org.eclipse.gef.mvc.fx.models.SelectionModel;
+import org.eclipse.gef.mvc.fx.operations.ChangeFocusOperation;
+import org.eclipse.gef.mvc.fx.operations.ChangeSelectionOperation;
+import org.eclipse.gef.mvc.fx.operations.ITransactionalOperation;
+import org.eclipse.gef.mvc.fx.operations.ReverseUndoCompositeOperation;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 
 import com.google.common.collect.Lists;
 import com.itemis.gef.tutorial.mindmap.model.MindMapConnection;
 import com.itemis.gef.tutorial.mindmap.model.MindMapNode;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapNodePart;
 import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapPart;
-
-import javafx.scene.Node;
 
 /**
  * This operation removes a node, all its connections and clears the {@link SelectionModel} and {@link FocusModel}.
@@ -39,12 +37,12 @@ public class DeleteNodeOperation extends ReverseUndoCompositeOperation {
 	}
 
 	private void prepareOperation(SimpleMindMapPart parent, MindMapNodePart nodePart) {
-		IViewer<Node> viewer = parent.getRoot().getViewer();
+		IViewer viewer = parent.getRoot().getViewer();
 		
 		// removing the selections and focus from, to be sure we don't delete any focused
 		// elements
-		add(new ChangeSelectionOperation<Node>(viewer, Collections.emptyList()));
-		add(new ChangeFocusOperation<>(viewer, null));
+		add(new ChangeSelectionOperation(viewer, Collections.emptyList()));
+		add(new ChangeFocusOperation(viewer, null));
 		
 		
 		List<MindMapConnection> connections = Lists.newArrayList(nodePart.getContent().getIncomingConnections());

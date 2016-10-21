@@ -13,7 +13,7 @@ public class DeleteMindMapNodeHandlePart extends AbstractMindMapHandlePart<Hover
 
 	
 	@Override
-	protected HoverOverlayImageView createVisual() {
+	protected HoverOverlayImageView doCreateVisual() {
 		URL overlayImageResource = DeleteMindMapNodeHandlePart.class.getResource(IMG_DELETE);
 		if (overlayImageResource == null) {
 			throw new IllegalStateException("Cannot find resource <" + IMG_DELETE + ">.");

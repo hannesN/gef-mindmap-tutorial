@@ -3,23 +3,22 @@ package com.itemis.gef.tutorial.mindmap;
 import org.eclipse.gef.common.adapt.AdapterKey;
 import org.eclipse.gef.common.adapt.inject.AdaptableScopes;
 import org.eclipse.gef.common.adapt.inject.AdapterMaps;
-import org.eclipse.gef.mvc.behaviors.HoverBehavior;
-import org.eclipse.gef.mvc.behaviors.SelectionBehavior;
 import org.eclipse.gef.mvc.fx.MvcFxModule;
-import org.eclipse.gef.mvc.fx.behaviors.FXHoverBehavior;
-import org.eclipse.gef.mvc.fx.parts.FXDefaultHoverFeedbackPartFactory;
-import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionFeedbackPartFactory;
-import org.eclipse.gef.mvc.fx.parts.FXDefaultSelectionHandlePartFactory;
-import org.eclipse.gef.mvc.fx.parts.FXSquareSegmentHandlePart;
-import org.eclipse.gef.mvc.fx.policies.FXFocusAndSelectOnClickPolicy;
-import org.eclipse.gef.mvc.fx.policies.FXHoverOnHoverPolicy;
-import org.eclipse.gef.mvc.fx.policies.FXResizeTranslateFirstAnchorageOnHandleDragPolicy;
-import org.eclipse.gef.mvc.fx.policies.FXTransformPolicy;
-import org.eclipse.gef.mvc.fx.policies.FXTranslateSelectedOnDragPolicy;
+import org.eclipse.gef.mvc.fx.behaviors.HoverBehavior;
+import org.eclipse.gef.mvc.fx.behaviors.SelectionBehavior;
+import org.eclipse.gef.mvc.fx.parts.DefaultHoverFeedbackPartFactory;
+import org.eclipse.gef.mvc.fx.parts.DefaultSelectionFeedbackPartFactory;
+import org.eclipse.gef.mvc.fx.parts.DefaultSelectionHandlePartFactory;
+import org.eclipse.gef.mvc.fx.parts.IContentPartFactory;
+import org.eclipse.gef.mvc.fx.parts.SquareSegmentHandlePart;
+import org.eclipse.gef.mvc.fx.policies.FocusAndSelectOnClickPolicy;
+import org.eclipse.gef.mvc.fx.policies.HoverOnHoverPolicy;
+import org.eclipse.gef.mvc.fx.policies.ResizeTranslateFirstAnchorageOnHandleDragPolicy;
+import org.eclipse.gef.mvc.fx.policies.TransformPolicy;
+import org.eclipse.gef.mvc.fx.policies.TranslateSelectedOnDragPolicy;
 import org.eclipse.gef.mvc.fx.providers.ShapeBoundsProvider;
 import org.eclipse.gef.mvc.fx.providers.ShapeOutlineProvider;
-import org.eclipse.gef.mvc.fx.viewer.FXViewer;
-import org.eclipse.gef.mvc.parts.IContentPartFactory;
+import org.eclipse.gef.mvc.fx.viewer.IViewer;
 
 import com.google.inject.TypeLiteral;
 import com.google.inject.multibindings.MapBinder;
@@ -39,8 +38,6 @@ import com.itemis.gef.tutorial.mindmap.policies.InlineEditOnClickPolicy;
 import com.itemis.gef.tutorial.mindmap.policies.ShowMindMapNodeContextMenuOnClickPolicy;
 import com.itemis.gef.tutorial.mindmap.policies.SimpleMindMapResizePolicy;
 import com.itemis.gef.tutorial.mindmap.policies.handles.DeleteNodeHandleOnClickPolicy;
-
-import javafx.scene.Node;
 
 /**
  * 
@@ -65,8 +62,8 @@ public class SimpleMindMapModul extends MvcFxModule {
 		bindMindMapNodePartAdapters(AdapterMaps.getAdapterMapBinder(binder(), MindMapNodePart.class));
 
 		// with this binding we create the handles
-		bindFXSquareSegmentHandlePartPartAdapter(
-				AdapterMaps.getAdapterMapBinder(binder(), FXSquareSegmentHandlePart.class));
+		bindSquareSegmentHandlePartPartAdapter(
+				AdapterMaps.getAdapterMapBinder(binder(), SquareSegmentHandlePart.class));
 
 		bindDeleteMindMapNodeHandlePartAdapters(
 				AdapterMaps.getAdapterMapBinder(binder(), DeleteMindMapNodeHandlePart.class));
@@ -84,20 +81,20 @@ public class SimpleMindMapModul extends MvcFxModule {
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(ShapeOutlineProvider.class);
 
 		// provides a hover feedback to the shape, , used by the FXHoverBehavior
-		AdapterKey<?> role = AdapterKey.role(FXDefaultHoverFeedbackPartFactory.HOVER_FEEDBACK_GEOMETRY_PROVIDER);
+		AdapterKey<?> role = AdapterKey.role(DefaultHoverFeedbackPartFactory.HOVER_FEEDBACK_GEOMETRY_PROVIDER);
 		adapterMapBinder.addBinding(role).to(ShapeOutlineProvider.class);
 
 		// provides a selection feedback to the shape
-		role = AdapterKey.role(FXDefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER);
+		role = AdapterKey.role(DefaultSelectionFeedbackPartFactory.SELECTION_FEEDBACK_GEOMETRY_PROVIDER);
 		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
 
 		// adding a translation policy to move the node around
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXTransformPolicy.class);
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXTranslateSelectedOnDragPolicy.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(TransformPolicy.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(TranslateSelectedOnDragPolicy.class);
 
 		// specify the factory to create the geometry object for the selection
 		// handles
-		role = AdapterKey.role(FXDefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER);
+		role = AdapterKey.role(DefaultSelectionHandlePartFactory.SELECTION_HANDLES_GEOMETRY_PROVIDER);
 		adapterMapBinder.addBinding(role).to(ShapeBoundsProvider.class);
 
 		// bind the resize policy to the MindMapNodePart
@@ -119,17 +116,17 @@ public class SimpleMindMapModul extends MvcFxModule {
 
 		// binding one instance of our factory to the IContentPartFactory type,
 		// to be used to create our parts
-		binder().bind(new TypeLiteral<IContentPartFactory<Node>>() {
+		binder().bind(new TypeLiteral<IContentPartFactory>() {
 		}).toInstance(new MindMapPartsFactory());
 	}
 
 	@Override
-	protected void bindContentViewerRootPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		super.bindContentViewerRootPartAdapters(adapterMapBinder);
-
+	protected void bindIRootPartAdaptersForContentViewer(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		super.bindIRootPartAdaptersForContentViewer(adapterMapBinder);
+	
 		// binding a hover behavior to the root part. it will react to
 		// HoverModel changes and render the hover part
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverBehavior.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(HoverBehavior.class);
 
 		// Adding the create Node policy
 		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(CreateNewNodeOnClickPolicy.class);
@@ -142,18 +139,18 @@ public class SimpleMindMapModul extends MvcFxModule {
 	protected void bindAbstractContentPartAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		super.bindAbstractContentPartAdapters(adapterMapBinder);
 
-		// binding the FXHoverOnHoverPolicy to every part
+		// binding the HoverOnHoverPolicy to every part
 		// if a mouse is moving above a part it is set i the HoverModel
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXHoverOnHoverPolicy.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(HoverOnHoverPolicy.class);
 
 		// add the focus and select policy to every part, listening to clicks
 		// and changing the focus and selection model
-		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FXFocusAndSelectOnClickPolicy.class);
+		adapterMapBinder.addBinding(AdapterKey.defaultRole()).to(FocusAndSelectOnClickPolicy.class);
 	}
 
 	@Override
-	protected void bindContentViewerAdapters(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
-		super.bindContentViewerAdapters(adapterMapBinder);
+	protected void bindIViewerAdaptersForContentViewer(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+		super.bindIViewerAdaptersForContentViewer(adapterMapBinder);
 		// bind the model to the content viewer
 		bindItemCreationModelAsContentViewerAdapter(adapterMapBinder);
 
@@ -191,10 +188,10 @@ public class SimpleMindMapModul extends MvcFxModule {
 	 * 
 	 * @param adapterMapBinder
 	 */
-	protected void bindFXSquareSegmentHandlePartPartAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
+	protected void bindSquareSegmentHandlePartPartAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
 		//
 		adapterMapBinder.addBinding(AdapterKey.defaultRole())
-				.to(FXResizeTranslateFirstAnchorageOnHandleDragPolicy.class);
+				.to(ResizeTranslateFirstAnchorageOnHandleDragPolicy.class);
 	}
 
 	protected void bindItemCreationModelAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
@@ -203,10 +200,10 @@ public class SimpleMindMapModul extends MvcFxModule {
 	}
 
 	/**
-	 * Scoping the ItemCreationModel in the FXViewer class
+	 * Scoping the ItemCreationModel in the Viewer class
 	 */
 	protected void bindItemCreationModel() {
-		binder().bind(ItemCreationModel.class).in(AdaptableScopes.typed(FXViewer.class));
+		binder().bind(ItemCreationModel.class).in(AdaptableScopes.typed(IViewer.class));
 	}
 	
 	protected void bindIInlineEditModelAsContentViewerAdapter(MapBinder<AdapterKey<?>, Object> adapterMapBinder) {
@@ -215,9 +212,9 @@ public class SimpleMindMapModul extends MvcFxModule {
 	}
 
 	/**
-	 * Scoping the InlineEditModel in the FXViewer class
+	 * Scoping the InlineEditModel in the Viewer class
 	 */
 	protected void bindInlineEditModel() {
-		binder().bind(InlineEditModel.class).in(AdaptableScopes.typed(FXViewer.class));
+		binder().bind(InlineEditModel.class).in(AdaptableScopes.typed(IViewer.class));
 	}
 }
