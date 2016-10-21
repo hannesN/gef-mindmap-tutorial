@@ -1,20 +1,18 @@
 package com.itemis.gef.tutorial.mindmap.policies.handles;
 
+import java.util.ArrayList;
 import java.util.Set;
 
-import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.gef.common.collections.ObservableSetMultimap;
-import org.eclipse.gef.mvc.domain.IDomain;
 import org.eclipse.gef.mvc.fx.policies.IFXOnClickPolicy;
-import org.eclipse.gef.mvc.operations.ITransactionalOperation;
 import org.eclipse.gef.mvc.parts.IRootPart;
 import org.eclipse.gef.mvc.parts.IVisualPart;
 import org.eclipse.gef.mvc.policies.AbstractInteractionPolicy;
-import org.eclipse.gef.mvc.viewer.IViewer;
+import org.eclipse.gef.mvc.policies.DeletionPolicy;
 
-import com.itemis.gef.tutorial.mindmap.operations.DeleteNodeOperation;
+import com.google.common.reflect.TypeToken;
+import com.itemis.gef.tutorial.mindmap.parts.MindMapConnectionPart;
 import com.itemis.gef.tutorial.mindmap.parts.MindMapNodePart;
-import com.itemis.gef.tutorial.mindmap.parts.SimpleMindMapPart;
 
 import javafx.scene.Node;
 import javafx.scene.input.MouseEvent;
@@ -29,32 +27,31 @@ public class DeleteNodeHandleOnClickPolicy extends AbstractInteractionPolicy<Nod
 
 	@Override
 	public void click(MouseEvent e) {
-
 		if (!e.isPrimaryButtonDown()) {
 			return;
 		}
 
-		IVisualPart<Node, ? extends Node> key = getAnchoredPart();
+		MindMapNodePart node = getAnchoredPart();
 
-		IVisualPart<Node, ? extends Node> targetPart = key;
-		if (targetPart instanceof MindMapNodePart) {
-			// delete the part
-			SimpleMindMapPart parent = (SimpleMindMapPart) targetPart.getParent();
+		// delete the part
+		IRootPart<Node, ? extends Node> root = getHost().getRoot();
+		@SuppressWarnings("serial")
+		DeletionPolicy<Node> delPolicy = root.getAdapter(new TypeToken<DeletionPolicy<Node>>() {
+		});
+		init(delPolicy);
 
-			ITransactionalOperation op = new DeleteNodeOperation(parent, (MindMapNodePart) targetPart);
-
-			try {
-
-				IRootPart<Node, ? extends Node> root = targetPart.getRoot();
-				IViewer<Node> viewer = root.getViewer();
-				IDomain<Node> domain = viewer.getDomain();
-				domain.execute(op, null);
-			} catch (ExecutionException e1) {
-				e1.printStackTrace();
+		// get all achoreds and check if we have a connection part
+		for (IVisualPart<Node, ? extends Node> a : new ArrayList<>(node.getAnchoredsUnmodifiable())) {
+			if (a instanceof MindMapConnectionPart) {
+				// now delete the parts (couldn't do it before, because of a
+				// concurrent modification exception)
+				delPolicy.delete((MindMapConnectionPart) a);
 			}
-
 		}
 
+		// and finally remove the node part
+		delPolicy.delete(node);
+		commit(delPolicy);
 	}
 
 	/**
@@ -62,7 +59,7 @@ public class DeleteNodeHandleOnClickPolicy extends AbstractInteractionPolicy<Nod
 	 * 
 	 * @return
 	 */
-	protected IVisualPart<Node, ? extends Node> getAnchoredPart() {
+	protected MindMapNodePart getAnchoredPart() {
 		// get the clicked handle part
 		IVisualPart<Node, ? extends Node> host = getHost();
 
@@ -80,7 +77,7 @@ public class DeleteNodeHandleOnClickPolicy extends AbstractInteractionPolicy<Nod
 		IVisualPart<Node, ? extends Node> key = keySet.iterator().next();
 
 		// return the key aka MindMapNodePart
-		return key;
+		return (MindMapNodePart) key;
 	}
 
 }
